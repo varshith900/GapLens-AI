@@ -177,7 +177,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
           className="self-start md:self-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/20 to-amber-600/15 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/35 text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-md hover:scale-[1.02] cursor-pointer shrink-0"
         >
           <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: "12s" }} />
-          <span>Load Hackathon Scholarship Scenario</span>
+          <span>Load Scholarship Demonstration</span>
         </button>
       </div>
 
@@ -377,7 +377,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                   <Globe className="w-8 h-8 text-slate-600 mx-auto" />
                   <p className="text-xs font-semibold text-slate-400">No source URLs added yet</p>
                   <p className="text-[11px] text-slate-500">
-                    Paste public web pages or click "Load Hackathon Scholarship Scenario" above
+                    Paste public web pages or click "Load Scholarship Demonstration" above
                   </p>
                 </div>
               ) : (

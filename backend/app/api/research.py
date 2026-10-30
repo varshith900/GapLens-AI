@@ -266,7 +266,7 @@ def export_pdf(research_id: str):
 @router.post("/demo/load")
 def load_demo_scholarship_scenario():
     """
-    Creates and immediately runs the official Hackathon scholarship scenario!
+    Creates and immediately runs the production demonstration scholarship scenario.
     """
     research_id = f"res_demo_{uuid.uuid4().hex[:6]}"
     now = datetime.now(timezone.utc).isoformat()

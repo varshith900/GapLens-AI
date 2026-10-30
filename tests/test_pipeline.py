@@ -38,9 +38,9 @@ class TestDigitalDarkSpotPipeline(unittest.TestCase):
             self.assertTrue(len(record.clean_text) > 50)
             self.assertTrue(len(record.snippets) > 0)
 
-    def test_hackathon_scholarship_scenario(self):
+    def test_scholarship_scenario(self):
         """
-        Verify the exact hackathon scenario:
+        Verify the exact scholarship scenario:
         - Eligibility is found
         - Differing deadline & document claims are detected as contradictions
         - Previous year source is flagged as potentially outdated
@@ -48,7 +48,7 @@ class TestDigitalDarkSpotPipeline(unittest.TestCase):
         - Renewal conditions flagged as critical information gap
         """
         demo_urls = list(DEMO_SOURCES.keys())
-        extracted = [source_extractor.extract_source(u).dict() for u in demo_urls]
+        extracted = [source_extractor.extract_source(u).model_dump() for u in demo_urls]
 
         # 1. Conflict detection
         conflicts = conflict_detector.detect_conflicts(extracted)

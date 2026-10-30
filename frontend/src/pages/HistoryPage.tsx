@@ -170,7 +170,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ user, onNavigate }) =>
               className="px-5 py-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/35 text-xs font-bold hover:bg-amber-500/30 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Load Hackathon Demo</span>
+              <span>Load Demonstration Case</span>
             </button>
           </div>
         </div>

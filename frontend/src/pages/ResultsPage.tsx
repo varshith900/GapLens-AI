@@ -144,7 +144,7 @@ export const ResultsPage: React.FC<ResultsPageProps> = ({ researchId, onNavigate
               <span className="text-xs font-mono text-slate-400">ID: {session.research_id}</span>
               {session.is_demo && (
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase">
-                  Hackathon Scenario
+                  Demonstration Benchmark
                 </span>
               )}
               <span className="text-xs font-mono text-slate-500">• {session.category}</span>

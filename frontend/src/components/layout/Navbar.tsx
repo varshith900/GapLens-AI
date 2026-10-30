@@ -156,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-500/15 via-amber-500/20 to-amber-600/15 hover:from-amber-500/30 hover:to-amber-600/30 text-amber-300 border border-amber-500/35 transition-all duration-200 hover:scale-[1.02] shadow-sm cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin" style={{ animationDuration: "8s" }} />
-            <span>{isDemoLoading ? "Analyzing Demo..." : "Test Hackathon Scenario"}</span>
+            <span>{isDemoLoading ? "Analyzing Demo..." : "Live Demonstration"}</span>
           </button>
 
           {/* Engine Status Diagnostic Pill */}
@@ -284,7 +284,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 text-amber-300 border border-amber-500/40 text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
             >
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>{isDemoLoading ? "Analyzing Demo..." : "Run Hackathon Scholarship Scenario"}</span>
+              <span>{isDemoLoading ? "Analyzing Demo..." : "Run Scholarship Demonstration"}</span>
             </button>
           </div>
 

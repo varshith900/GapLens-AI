@@ -19,7 +19,7 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNav
           </p>
           <div className="flex items-center gap-2 text-xs text-amber-400/90 font-medium pt-1">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Shinchan Online Hackathon 2026</span>
+            <span>AI Information Gap Detection Platform</span>
           </div>
         </div>
 
@@ -88,7 +88,7 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNav
       </div>
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-        <p>© 2026 Digital Dark Spot. Built for the Shinchan Online Hackathon 2026.</p>
+        <p>© 2026 Digital Dark Spot. All rights reserved. Production Intelligence Platform.</p>
         <p className="flex items-center gap-2">
           <span>Powered by Google Gemini & FastAPI</span>
           <span>•</span>

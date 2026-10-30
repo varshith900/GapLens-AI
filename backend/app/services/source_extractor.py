@@ -11,7 +11,7 @@ from backend.app.schemas.research import SourceRecord
 
 logger = logging.getLogger(__name__)
 
-# Realistic, transparent demonstration sources for the Hackathon scholarship scenario
+# Realistic, transparent demonstration sources for the scholarship verification scenario
 DEMO_SOURCES: Dict[str, Dict[str, Any]] = {
     "https://scholarships.gov.in/national-merit-2025": {
         "title": "[DEMO SOURCE A] National Merit Scholarship Portal - Official Guidelines (2025-2026)",

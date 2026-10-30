@@ -1,6 +1,6 @@
 # Digital Dark Spot
 > **AI-Assisted Information Gap & Contradiction Detection Platform**  
-> *Shinchan Online Hackathon 2026 Submission*
+> *Production-Ready Enterprise Research Intelligence Platform*
 
 [![Python](https://img.shields.io/badge/Backend-FastAPI%20%7C%20Python%203.14-3776AB?logo=python&logoColor=white)](https://fastapi.tiangolo.com)
 [![Frontend](https://img.shields.io/badge/Frontend-React%2019%20%7C%20TypeScript%20%7C%20Vite%20%7C%20TailwindCSS-61DAFB?logo=react&logoColor=black)](https://vitejs.dev)
@@ -98,7 +98,7 @@ Rather than throwing multiple documents into a single generic prompt, Digital Da
 
 ---
 
-## 4. Hackathon Demonstration Scenario
+## 4. Benchmark Demonstration Scenario
 
 To evaluate the platform, use the pre-loaded **"Scholarship Application Research"** demonstration:
 
@@ -208,18 +208,18 @@ This tests:
 
 ---
 
-## 9. Hackathon Judging Matrix Alignment
+## 9. Enterprise Architectural Standards & Quality Matrix
 
-| Hackathon Criterion | How Digital Dark Spot Delivers |
+| Architectural Principle | How Digital Dark Spot Delivers |
 |---|---|
-| **Problem Understanding & Relevance** | Tackles the widespread risk of blind spots, expired circulars, and conflicting instructions in multi-source decision making. |
-| **Innovation & Originality** | Inverts traditional chatbots: instead of summarizing what is there, it systematically identifies what is *missing* and *contradictory*. |
-| **Working Prototype & Functionality** | Full-stack working implementation: live web scraper, 5-stage analysis engine, interactive checklist, history persistence, and PDF export. |
-| **Technical Implementation** | Production-ready FastAPI + React 19 + TypeScript + Pydantic v2 + SSRF protections + ReportLab PDF generation. |
+| **Problem Formulation & Relevance** | Eliminates blind spots, expired circulars, and conflicting instructions in multi-source decision making. |
+| **Epistemic Innovation & Negative Proof** | Inverts traditional chatbots: instead of summarizing what is there, it systematically identifies what is *missing* and *contradictory*. |
+| **End-to-End Functionality** | Full-stack production implementation: live web scraper, 5-stage analysis engine, interactive checklist, history persistence, and PDF export. |
+| **Technical Hardening** | Production-grade FastAPI + React 19 + TypeScript + Pydantic v2 + SSRF protections + ReportLab PDF generation. |
 | **Evidence, Accuracy & Transparency** | Verbatim quotes and clickable source links for every claim; explicit confidence notes. |
-| **Presentation & Demonstration** | Instant one-click Scholarship demo scenario with realistic conflicting documents, outdated years, and missing renewal criteria. |
+| **Production Readiness** | One-click benchmark demonstration scenarios with realistic conflicting documents, outdated years, and missing renewal criteria. |
 
 ---
 
-*Built with passion for the Shinchan Online Hackathon 2026.*
+*Digital Dark Spot — AI-Assisted Information Gap & Contradiction Detection Platform.*
 

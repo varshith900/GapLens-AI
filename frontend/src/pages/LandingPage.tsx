@@ -271,7 +271,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </span>
             <span className="font-heading tracking-wide">AI-Assisted Information Gap & Contradiction Platform</span>
             <span className="text-slate-500 hidden sm:inline">•</span>
-            <span className="text-slate-400 font-medium hidden sm:inline">Shinchan Hackathon 2026</span>
+            <span className="text-slate-400 font-medium hidden sm:inline">Production Research Intelligence</span>
           </div>
 
           {/* Main Headline */}
@@ -789,7 +789,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900 border border-slate-700 hover:border-amber-500/50 text-white font-bold text-sm transition-all hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
             >
               <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>{loadingDemo ? "Analyzing Demo..." : "Run Hackathon Demo Scenario"}</span>
+              <span>{loadingDemo ? "Analyzing Demo..." : "Run Sample Scholarship Audit"}</span>
             </button>
           </div>
         </div>
