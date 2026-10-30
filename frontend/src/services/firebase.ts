@@ -152,7 +152,9 @@ export async function signInWithGoogle(): Promise<UserProfile> {
         throw new Error("Popup blocked: please allow browser popups for localhost to complete Google Sign In.");
       }
       if (err.code === "auth/unauthorized-domain") {
-        throw new Error("This domain is not authorized in Firebase Authentication settings.");
+        const customErr = new Error("This domain (localhost) is not authorized in Firebase Authentication settings.");
+        (customErr as any).code = "auth/unauthorized-domain";
+        throw customErr;
       }
       if (err.code === "auth/operation-not-allowed") {
         throw new Error("Google Sign-In is not enabled for this Firebase project. Enable it under Firebase Console > Authentication > Sign-in method.");

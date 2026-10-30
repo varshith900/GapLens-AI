@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Compass, Mail, Lock, User, ArrowRight, AlertCircle, Sparkles, Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { Compass, Mail, Lock, User, ArrowRight, AlertCircle, Sparkles, Eye, EyeOff, CheckCircle2, ExternalLink } from "lucide-react";
 import { signupUser, loginUser, signInWithGoogle } from "../services/firebase";
 import type { UserProfile } from "../types";
 
@@ -16,12 +16,14 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isDomainUnauthorized, setIsDomainUnauthorized] = useState(false);
 
   const isDark = theme === "dark";
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setIsDomainUnauthorized(false);
     if (!email || !password || !name) {
       setError("Please complete all fields.");
       return;
@@ -46,10 +48,15 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
     try {
       setLoading(true);
       setError("");
+      setIsDomainUnauthorized(false);
       const user = await signInWithGoogle();
       onAuthSuccess(user);
     } catch (err: any) {
-      setError(err.message || "Google registration was unsuccessful.");
+      if (err.code === "auth/unauthorized-domain") {
+        setIsDomainUnauthorized(true);
+      } else {
+        setError(err.message || "Google registration was unsuccessful.");
+      }
     } finally {
       setLoading(false);
     }
@@ -117,6 +124,40 @@ export const SignupPage: React.FC<SignupPageProps> = ({ onNavigate, onAuthSucces
               Set up your profile to start auditing multi-source intelligence.
             </p>
           </div>
+
+          {isDomainUnauthorized && (
+            <div className="mb-5 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/40 text-xs space-y-2.5 animate-fade-in">
+              <div className="flex items-center gap-2 font-bold text-amber-500">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>One-Time Step: Authorize 'localhost' in Firebase Console</span>
+              </div>
+              <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+                Google Firebase projects require <code>localhost</code> to be explicitly listed under <b>Authorized domains</b> before Google OAuth popups can open.
+              </p>
+              <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 font-mono text-[11px] text-slate-600 dark:text-slate-400">
+                <p>1. Open Firebase Console settings below</p>
+                <p>2. Scroll to <b>Authorized domains</b> → click <b>Add domain</b></p>
+                <p>3. Enter <code>localhost</code> and click <b>Save</b></p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 pt-1">
+                <a
+                  href="https://console.firebase.google.com/project/digital-dark-spot-ai/authentication/settings"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold flex items-center gap-1.5 transition-all shadow-sm"
+                >
+                  <span>Open Firebase Settings ↗</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={handleDemoAccess}
+                  className="px-3.5 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium transition-colors cursor-pointer"
+                >
+                  Continue in Demo Mode
+                </button>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div className="mb-4 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs flex items-center gap-2 animate-fade-in font-medium">
