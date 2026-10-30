@@ -15,6 +15,7 @@ export function App() {
   const [currentParam, setCurrentParam] = useState<string>("");
   const [user, setUser] = useState<UserProfile | null>(getStoredUser());
 
+  // Listen to Auth State
   useEffect(() => {
     const unsub = subscribeAuth((u) => {
       setUser(u);
@@ -22,16 +23,51 @@ export function App() {
     return () => unsub();
   }, []);
 
+  // Synchronize with URL hash on load & browser back/forward
+  useEffect(() => {
+    const parseHash = () => {
+      const rawHash = window.location.hash.replace(/^#\/?/, "");
+      if (!rawHash) {
+        setCurrentView("landing");
+        setCurrentParam("");
+        return;
+      }
+      const [path, queryString] = rawHash.split("?");
+      const params = new URLSearchParams(queryString || "");
+      const id = params.get("id") || "";
+
+      if (["landing", "research", "results", "history", "login", "signup"].includes(path)) {
+        setCurrentView(path);
+        if (id) setCurrentParam(id);
+      }
+    };
+
+    parseHash();
+    window.addEventListener("hashchange", parseHash);
+    return () => window.removeEventListener("hashchange", parseHash);
+  }, []);
+
   const handleNavigate = (view: string, param?: string) => {
     setCurrentView(view);
     if (param !== undefined) {
       setCurrentParam(param);
     }
+
+    let targetHash = `#/${view}`;
+    if (view === "landing") {
+      targetHash = "#/";
+    } else if (view === "results" && param) {
+      targetHash = `#/results?id=${encodeURIComponent(param)}`;
+    }
+
+    if (window.location.hash !== targetHash) {
+      window.location.hash = targetHash;
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0b0f19] text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="min-h-screen flex flex-col bg-[#07090e] bg-mesh-pattern text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 font-sans antialiased">
       <Navbar
         currentView={currentView}
         onNavigate={handleNavigate}
