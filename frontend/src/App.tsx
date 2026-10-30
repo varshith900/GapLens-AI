@@ -91,7 +91,7 @@ export function App() {
     <div
       className={`min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500/30 selection:text-amber-500 transition-colors duration-300 ${
         theme === "dark"
-          ? "bg-[#07090e] text-slate-100"
+          ? "bg-[#0b0f19] text-slate-100"
           : "bg-[#f8fafc] text-slate-900"
       } bg-mesh-pattern`}
     >
