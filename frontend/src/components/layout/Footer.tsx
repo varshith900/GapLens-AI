@@ -1,49 +1,76 @@
 import React from "react";
 import { Compass, ShieldCheck, Sparkles } from "lucide-react";
 
-export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNavigate }) => {
+export const Footer: React.FC<{ onNavigate: (view: string) => void; theme?: "dark" | "light" }> = ({
+  onNavigate,
+  theme = "dark",
+}) => {
+  const isDark = theme === "dark";
+
   return (
-    <footer className="w-full border-t border-slate-800 bg-slate-950/90 text-slate-400 py-12 px-4 sm:px-6 lg:px-8 mt-auto">
+    <footer
+      className={`w-full border-t py-12 px-4 sm:px-6 lg:px-8 mt-auto transition-colors duration-300 ${
+        isDark
+          ? "border-slate-800/80 bg-[#07090e]/95 text-slate-400"
+          : "border-slate-200 bg-white/95 text-slate-600 shadow-sm"
+      }`}
+    >
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         
         {/* Brand info */}
         <div className="space-y-3 md:col-span-1">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-sm">
               <Compass className="w-4 h-4" />
             </div>
-            <span className="font-bold text-white text-base">Digital Dark Spot</span>
+            <span className={`font-black text-base font-heading ${isDark ? "text-white" : "text-slate-900"}`}>
+              Digital Dark Spot
+            </span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs leading-relaxed">
             The AI-assisted research intelligence platform that exposes blind spots, contradictory claims, and outdated data before you make high-stakes decisions.
           </p>
-          <div className="flex items-center gap-2 text-xs text-amber-400/90 font-medium pt-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="flex items-center gap-2 text-xs text-amber-500 font-semibold pt-1">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>AI Information Gap Detection Platform</span>
           </div>
         </div>
 
         {/* Quick links */}
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3">Platform</h4>
+          <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDark ? "text-slate-300" : "text-slate-800"}`}>
+            Platform
+          </h4>
           <ul className="space-y-2 text-xs">
             <li>
-              <button onClick={() => onNavigate("research")} className="hover:text-amber-400 transition-colors">
+              <button
+                onClick={() => onNavigate("research")}
+                className="hover:text-amber-500 transition-colors cursor-pointer"
+              >
                 Research Workspace
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("history")} className="hover:text-amber-400 transition-colors">
+              <button
+                onClick={() => onNavigate("history")}
+                className="hover:text-amber-500 transition-colors cursor-pointer"
+              >
                 Session History
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("landing")} className="hover:text-amber-400 transition-colors">
+              <button
+                onClick={() => onNavigate("landing")}
+                className="hover:text-amber-500 transition-colors cursor-pointer"
+              >
                 How It Works
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("landing")} className="hover:text-amber-400 transition-colors">
+              <button
+                onClick={() => onNavigate("landing")}
+                className="hover:text-amber-500 transition-colors cursor-pointer"
+              >
                 Core Capabilities
               </button>
             </li>
@@ -52,22 +79,24 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNav
 
         {/* Verification Engine */}
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3">Engine Highlights</h4>
+          <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDark ? "text-slate-300" : "text-slate-800"}`}>
+            Engine Highlights
+          </h4>
           <ul className="space-y-2 text-xs">
-            <li className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
               <span>Evidence Traceability Guarantee</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
               <span>Cross-Source Conflict Compare</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
               <span>Academic Cycle Freshness Audit</span>
             </li>
-            <li className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <li className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
               <span>Actionable Verification Checklists</span>
             </li>
           </ul>
@@ -75,10 +104,18 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNav
 
         {/* Ethical disclaimer */}
         <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300 mb-3">Responsible AI Notice</h4>
-          <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-300 mb-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+          <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${isDark ? "text-slate-300" : "text-slate-800"}`}>
+            Responsible AI Notice
+          </h4>
+          <div
+            className={`p-3 rounded-2xl border text-[11px] leading-relaxed ${
+              isDark
+                ? "bg-slate-900/80 border-slate-800 text-slate-400"
+                : "bg-slate-50 border-slate-200 text-slate-600"
+            }`}
+          >
+            <div className={`flex items-center gap-1.5 font-bold mb-1 ${isDark ? "text-slate-200" : "text-slate-800"}`}>
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-500" />
               <span>Evidence Grounding</span>
             </div>
             Findings are flagged as potential information gaps, possible conflicts, and verification leads. Information absent from reviewed documents does not mean it does not exist elsewhere.
@@ -87,12 +124,14 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void }> = ({ onNav
 
       </div>
 
-      <div className="max-w-7xl mx-auto pt-6 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+      <div className={`max-w-7xl mx-auto pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-xs gap-4 ${
+        isDark ? "border-slate-800/80 text-slate-500" : "border-slate-200 text-slate-500"
+      }`}>
         <p>© 2026 Digital Dark Spot. All rights reserved. Production Intelligence Platform.</p>
-        <p className="flex items-center gap-2">
+        <p className="flex items-center gap-2 font-mono text-[11px]">
           <span>Powered by Google Gemini & FastAPI</span>
           <span>•</span>
-          <span className="text-slate-400 font-mono">v1.0.0-production</span>
+          <span>v1.0.0-production</span>
         </p>
       </div>
     </footer>

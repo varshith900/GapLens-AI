@@ -14,6 +14,27 @@ export function App() {
   const [currentView, setCurrentView] = useState<string>("landing");
   const [currentParam, setCurrentParam] = useState<string>("");
   const [user, setUser] = useState<UserProfile | null>(getStoredUser());
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    const saved = localStorage.getItem("app_theme");
+    return (saved === "light" || saved === "dark") ? saved : "dark";
+  });
+
+  // Synchronize theme with DOM
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "dark") {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    } else {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    }
+    localStorage.setItem("app_theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
 
   // Listen to Auth State
   useEffect(() => {
@@ -67,17 +88,25 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#07090e] bg-mesh-pattern text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 font-sans antialiased">
+    <div
+      className={`min-h-screen flex flex-col font-sans antialiased selection:bg-amber-500/30 selection:text-amber-500 transition-colors duration-300 ${
+        theme === "dark"
+          ? "bg-[#07090e] text-slate-100"
+          : "bg-[#f8fafc] text-slate-900"
+      } bg-mesh-pattern`}
+    >
       <Navbar
         currentView={currentView}
         onNavigate={handleNavigate}
         user={user}
         onAuthChange={setUser}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       <main className="flex-1">
         {currentView === "landing" && (
-          <LandingPage onNavigate={handleNavigate} />
+          <LandingPage onNavigate={handleNavigate} theme={theme} />
         )}
 
         {currentView === "login" && (
@@ -87,6 +116,7 @@ export function App() {
               setUser(u);
               handleNavigate("research");
             }}
+            theme={theme}
           />
         )}
 
@@ -97,6 +127,7 @@ export function App() {
               setUser(u);
               handleNavigate("research");
             }}
+            theme={theme}
           />
         )}
 
@@ -104,6 +135,7 @@ export function App() {
           <ResearchPage
             user={user}
             onNavigate={handleNavigate}
+            theme={theme}
           />
         )}
 
@@ -111,6 +143,7 @@ export function App() {
           <ResultsPage
             researchId={currentParam}
             onNavigate={handleNavigate}
+            theme={theme}
           />
         )}
 
@@ -118,11 +151,12 @@ export function App() {
           <HistoryPage
             user={user}
             onNavigate={handleNavigate}
+            theme={theme}
           />
         )}
       </main>
 
-      <Footer onNavigate={handleNavigate} />
+      <Footer onNavigate={handleNavigate} theme={theme} />
     </div>
   );
 }

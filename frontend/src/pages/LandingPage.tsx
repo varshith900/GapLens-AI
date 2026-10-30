@@ -36,14 +36,15 @@ import { loadDemoScenario } from "../services/api";
 
 interface LandingPageProps {
   onNavigate: (view: string, param?: string) => void;
+  theme?: "dark" | "light";
 }
 
 const ROTATING_HIGHLIGHTS = [
-  "Pinpoint silent omissions before making critical decisions",
+  "Pinpoint silent omissions before making high-stakes decisions",
   "Detect conflicting deadlines across government circulars",
-  "Audit outdated 2023 regulations before you apply",
-  "Generate prioritized verification checklists with phone & email contacts",
-  "Back every single finding with verbatim grounding quotes"
+  "Audit outdated regulations and expired academic cycles",
+  "Generate prioritized verification checklists with official office contacts",
+  "Back every single finding with traceable verbatim grounding quotes"
 ];
 
 const DEMO_SCENARIOS = {
@@ -52,8 +53,6 @@ const DEMO_SCENARIOS = {
     name: "Government Scholarship",
     badge: "Education",
     icon: GraduationCap,
-    accentColor: "from-amber-500/20 to-amber-600/10",
-    borderColor: "border-amber-500/40",
     question: "What should a student verify before applying for a national or state merit scholarship?",
     sourcesCount: 4,
     gapsCount: 2,
@@ -81,8 +80,6 @@ const DEMO_SCENARIOS = {
     name: "Enterprise Database Migration",
     badge: "Technology",
     icon: Cloud,
-    accentColor: "from-cyan-500/20 to-blue-600/10",
-    borderColor: "border-cyan-500/40",
     question: "What compliance and failover criteria are required before migrating to Aurora PostgreSQL?",
     sourcesCount: 3,
     gapsCount: 2,
@@ -107,11 +104,9 @@ const DEMO_SCENARIOS = {
   },
   clinical: {
     id: "clinical",
-    name: "Clinical Trial Oncology Protocol",
+    name: "Clinical Oncology Protocol",
     badge: "Healthcare",
     icon: Stethoscope,
-    accentColor: "from-rose-500/20 to-pink-600/10",
-    borderColor: "border-rose-500/40",
     question: "What exclusion criteria and biomarker thresholds apply for the Phase-II oncology trial?",
     sourcesCount: 4,
     gapsCount: 1,
@@ -136,7 +131,7 @@ const DEMO_SCENARIOS = {
   }
 };
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "dark" }) => {
   const [loadingDemo, setLoadingDemo] = useState(false);
   const [activeScenarioKey, setActiveScenarioKey] = useState<"scholarship" | "cloud" | "clinical">("scholarship");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -145,6 +140,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   const [activePipelineStage, setActivePipelineStage] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [heroSearchInput, setHeroSearchInput] = useState("");
+
+  const isDark = theme === "dark";
 
   // Rotating highlight ticker
   useEffect(() => {
@@ -242,40 +239,50 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-mesh-pattern relative overflow-hidden text-slate-100">
+    <div className="flex flex-col min-h-screen relative overflow-hidden transition-colors duration-300">
       
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 right-4 sm:right-8 z-50 animate-slide-down bg-slate-900 border border-amber-500/50 text-amber-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-xl">
+        <div className="fixed top-20 right-4 sm:right-8 z-50 animate-slide-down bg-slate-900 dark:bg-slate-950 border border-amber-500/50 text-amber-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 backdrop-blur-xl">
           <Sparkles className="w-4 h-4 text-amber-400 animate-spin" />
           <span className="text-xs sm:text-sm font-semibold">{toastMessage}</span>
         </div>
       )}
 
-      {/* Dynamic Ambient Background Aura */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[350px] sm:w-[750px] lg:w-[1100px] h-[550px] bg-gradient-to-b from-amber-500/20 via-indigo-600/10 to-transparent blur-[140px] rounded-full pointer-events-none animate-pulse-slow"></div>
+      {/* Dynamic Ambient Background Glows */}
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[350px] sm:w-[750px] lg:w-[1100px] h-[500px] bg-gradient-to-b from-amber-500/20 via-indigo-600/15 to-transparent blur-[140px] rounded-full pointer-events-none animate-pulse-slow"></div>
       <div className="absolute top-96 -left-32 w-[300px] sm:w-[500px] h-[400px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none animate-float"></div>
       <div className="absolute top-[800px] -right-32 w-[300px] sm:w-[500px] h-[400px] bg-rose-500/10 blur-[130px] rounded-full pointer-events-none"></div>
 
       {/* ============================================================== */}
       {/* HERO SECTION WITH DYNAMIC ROTATING TICKER & SEARCH SCANNER     */}
       {/* ============================================================== */}
-      <section className="relative pt-10 pb-16 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-28 z-10">
+      <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           
           {/* Eyebrow badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-amber-500/35 text-amber-300 text-xs sm:text-sm font-semibold mb-6 sm:mb-8 shadow-xl shadow-amber-500/10 hover:border-amber-400 transition-all hover:scale-105 cursor-default">
+          <div
+            className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold mb-6 sm:mb-8 transition-all hover:scale-105 cursor-default ${
+              isDark
+                ? "bg-slate-900/90 border-amber-500/35 text-amber-300 shadow-xl shadow-amber-500/10"
+                : "bg-white border-amber-500/40 text-amber-700 shadow-md shadow-amber-500/10"
+            }`}
+          >
             <span className="flex h-2.5 w-2.5 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-400"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
             <span className="font-heading tracking-wide">AI-Assisted Information Gap & Contradiction Platform</span>
-            <span className="text-slate-500 hidden sm:inline">•</span>
-            <span className="text-slate-400 font-medium hidden sm:inline">Production Research Intelligence</span>
+            <span className="text-slate-400 hidden sm:inline">•</span>
+            <span className="text-slate-500 dark:text-slate-400 font-medium hidden sm:inline">Production Intelligence</span>
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-black tracking-tight text-white max-w-5xl mx-auto leading-[1.12] mb-6">
+          <h1
+            className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-black tracking-tight max-w-5xl mx-auto leading-[1.08] mb-6 ${
+              isDark ? "text-white" : "text-slate-950"
+            }`}
+          >
             Don't Just Find Information.{" "}
             <span className="text-shimmer block sm:inline">
               Discover What's Missing.
@@ -284,28 +291,47 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
           {/* Dynamic Rotating Highlight Ticker */}
           <div className="h-10 sm:h-8 flex items-center justify-center mb-6">
-            <p className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs sm:text-sm text-amber-300/90 font-mono transition-all animate-fade-in">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <p
+              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-xl border text-xs sm:text-sm font-mono transition-all animate-fade-in ${
+                isDark
+                  ? "bg-slate-900/80 border-slate-800 text-amber-300/90"
+                  : "bg-white border-slate-200 text-amber-700 shadow-xs"
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
               <span>{ROTATING_HIGHLIGHTS[highlightIdx]}</span>
             </p>
           </div>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-10 font-normal">
+          <p
+            className={`text-sm sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-normal ${
+              isDark ? "text-slate-300" : "text-slate-600"
+            }`}
+          >
             Scattered research creates dangerous blind spots. Digital Dark Spot cross-examines multiple sources together to pinpoint <b>silent omissions</b>, <b>conflicting instructions</b>, and <b>superseded dates</b> before you make critical decisions.
           </p>
 
           {/* HERO QUICK-LAUNCH SEARCH SCANNER BAR */}
           <div className="max-w-3xl mx-auto mb-14">
-            <form onSubmit={handleHeroSearch} className="p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl bg-slate-900/90 border border-amber-500/30 shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center gap-2">
+            <form
+              onSubmit={handleHeroSearch}
+              className={`p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center gap-2 transition-all ${
+                isDark
+                  ? "bg-slate-900/90 border-amber-500/35 focus-within:border-amber-400"
+                  : "bg-white border-slate-300 focus-within:border-amber-500 shadow-slate-200/50"
+              }`}
+            >
               <div className="flex items-center gap-3 w-full px-3 py-2 text-left">
-                <Search className="w-5 h-5 text-amber-400 shrink-0" />
+                <Search className="w-5 h-5 text-amber-500 shrink-0" />
                 <input
                   type="text"
                   placeholder="Enter a research topic, query, or website URL..."
                   value={heroSearchInput}
                   onChange={(e) => setHeroSearchInput(e.target.value)}
-                  className="w-full bg-transparent text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none"
+                  className={`w-full bg-transparent text-sm sm:text-base placeholder-slate-400 focus:outline-none ${
+                    isDark ? "text-white" : "text-slate-900"
+                  }`}
                 />
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -321,14 +347,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
 
             {/* Instant Quick-Test Scenario Pills */}
             <div className="flex items-center justify-center flex-wrap gap-2 mt-4 text-xs">
-              <span className="text-slate-400 font-mono">Quick test presets:</span>
+              <span className="text-slate-500 dark:text-slate-400 font-mono">Quick test presets:</span>
               <button
                 type="button"
                 onClick={() => {
                   setActiveScenarioKey("scholarship");
                   handleRunDemo();
                 }}
-                className="px-2.5 py-1 rounded-lg bg-slate-900/80 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-800 hover:border-amber-500/40 transition-colors cursor-pointer"
+                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                  isDark
+                    ? "bg-slate-900/80 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border-slate-800 hover:border-amber-500/40"
+                    : "bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border-slate-200 hover:border-amber-300 shadow-xs"
+                }`}
               >
                 🎓 Post-Matric Scholarship
               </button>
@@ -338,7 +368,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                   setActiveScenarioKey("cloud");
                   showToast("Switched to Enterprise Database Migration scenario");
                 }}
-                className="px-2.5 py-1 rounded-lg bg-slate-900/80 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/40 transition-colors cursor-pointer"
+                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                  isDark
+                    ? "bg-slate-900/80 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border-slate-800 hover:border-cyan-500/40"
+                    : "bg-white hover:bg-cyan-50 text-slate-700 hover:text-cyan-800 border-slate-200 hover:border-cyan-300 shadow-xs"
+                }`}
               >
                 ☁️ Cloud Aurora Migration
               </button>
@@ -348,7 +382,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                   setActiveScenarioKey("clinical");
                   showToast("Switched to Clinical Trial Oncology scenario");
                 }}
-                className="px-2.5 py-1 rounded-lg bg-slate-900/80 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border border-slate-800 hover:border-rose-500/40 transition-colors cursor-pointer"
+                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                  isDark
+                    ? "bg-slate-900/80 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border-slate-800 hover:border-rose-500/40"
+                    : "bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 border-slate-200 hover:border-rose-300 shadow-xs"
+                }`}
               >
                 🧬 Clinical Oncology Protocol
               </button>
@@ -358,23 +396,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           {/* ============================================================== */}
           {/* INTERACTIVE LIVE AUDIT SIMULATOR (PROMINENT HERO PLAYGROUND) */}
           {/* ============================================================== */}
-          <div className="max-w-5xl mx-auto rounded-3xl glass-panel-elevated p-5 sm:p-8 text-left border border-slate-800/90 shadow-2xl relative overflow-hidden card-hover-lift">
+          <div className="max-w-5xl mx-auto rounded-3xl glass-panel-elevated p-5 sm:p-8 text-left border shadow-2xl relative overflow-hidden card-hover-lift">
             
             {/* Header with Live Scenario Selector Tabs */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800/80 pb-5 mb-6 gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-5 mb-6 gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
-                  <span className="text-xs font-mono text-slate-400 font-semibold tracking-wider uppercase">Interactive Engine Simulator</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">Live Demonstration</span>
+                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Interactive Engine Simulator</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/30">Live Demonstration</span>
                 </div>
-                <h3 className="text-base sm:text-lg font-heading font-bold text-white">
+                <h3 className={`text-base sm:text-lg font-heading font-bold ${isDark ? "text-white" : "text-slate-950"}`}>
                   Cross-Source Information Gap & Contradiction Detection
                 </h3>
               </div>
 
               {/* Scenario Toggle Switcher */}
-              <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-950/80 border border-slate-800 overflow-x-auto">
+              <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 overflow-x-auto">
                 {(Object.keys(DEMO_SCENARIOS) as Array<keyof typeof DEMO_SCENARIOS>).map((key) => {
                   const s = DEMO_SCENARIOS[key];
                   const Icon = s.icon;
@@ -386,7 +424,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                       className={`px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                         isActive
                           ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25"
-                          : "text-slate-400 hover:text-white hover:bg-slate-900"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -398,21 +436,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Scenario Header Info */}
-            <div className="p-4 rounded-2xl bg-slate-950/70 border border-slate-800/80 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[11px] font-mono text-slate-400 uppercase font-semibold">Research Query:</span>
-                <p className="text-xs sm:text-sm font-semibold text-slate-200 mt-0.5">
+                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase font-semibold">Research Query:</span>
+                <p className={`text-xs sm:text-sm font-semibold mt-0.5 ${isDark ? "text-slate-200" : "text-slate-800"}`}>
                   "{scenario.question}"
                 </p>
               </div>
               <div className="flex items-center gap-3 shrink-0 text-xs font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-800">
+                <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
                   {scenario.sourcesCount} Sources
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 font-bold">
+                <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
                   {scenario.gapsCount} Gaps
                 </span>
-                <span className="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-300 border border-rose-500/30 font-bold">
+                <span className="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30 font-bold">
                   {scenario.conflictsCount} Conflicts
                 </span>
               </div>
@@ -422,81 +460,81 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               
               {/* Card 1: Missing Gap */}
-              <div className="p-5 rounded-2xl bg-amber-950/15 border border-amber-500/40 flex flex-col justify-between space-y-3 relative group hover:border-amber-500 transition-all">
+              <div className="p-5 rounded-2xl bg-amber-500/10 dark:bg-amber-950/20 border border-amber-500/40 flex flex-col justify-between space-y-3 relative group hover:border-amber-500 transition-all">
                 <div>
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-amber-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-amber-600 dark:text-amber-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                       <AlertTriangle className="w-3.5 h-3.5" />
                       <span>Information Gap</span>
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300">
                       High Priority
                     </span>
                   </div>
-                  <h4 className="text-sm font-heading font-bold text-white mb-1.5">
+                  <h4 className={`text-sm font-heading font-bold mb-1.5 ${isDark ? "text-white" : "text-slate-900"}`}>
                     {scenario.sampleGap.title}
                   </h4>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className={`text-xs leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>
                     {scenario.sampleGap.desc}
                   </p>
                 </div>
-                <div className="text-[11px] font-mono text-amber-300 bg-amber-950/50 px-2.5 py-1.5 rounded-xl border border-amber-800/40 font-semibold">
+                <div className="text-[11px] font-mono text-amber-700 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-950/50 px-2.5 py-1.5 rounded-xl border border-amber-500/30 font-semibold">
                   {scenario.sampleGap.status}
                 </div>
               </div>
 
               {/* Card 2: Contradiction */}
-              <div className="p-5 rounded-2xl bg-rose-950/15 border border-rose-500/40 flex flex-col justify-between space-y-3 relative group hover:border-rose-500 transition-all">
+              <div className="p-5 rounded-2xl bg-rose-500/10 dark:bg-rose-950/20 border border-rose-500/40 flex flex-col justify-between space-y-3 relative group hover:border-rose-500 transition-all">
                 <div>
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-rose-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-rose-600 dark:text-rose-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                       <ShieldAlert className="w-3.5 h-3.5" />
                       <span>Contradiction</span>
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300">
                       Discrepancy
                     </span>
                   </div>
-                  <h4 className="text-sm font-heading font-bold text-white mb-2">
+                  <h4 className={`text-sm font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
                     {scenario.sampleConflict.title}
                   </h4>
-                  <div className="space-y-1.5 text-xs text-slate-300">
-                    <p className="p-2 rounded-lg bg-slate-900/80 border border-slate-800 font-medium">
-                      <span className="text-amber-400 font-bold">A:</span> {scenario.sampleConflict.claimA}
+                  <div className="space-y-1.5 text-xs">
+                    <p className="p-2 rounded-lg bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 font-medium text-slate-800 dark:text-slate-200">
+                      <span className="text-amber-500 font-bold">A:</span> {scenario.sampleConflict.claimA}
                     </p>
-                    <p className="p-2 rounded-lg bg-slate-900/80 border border-slate-800 font-medium">
-                      <span className="text-rose-400 font-bold">B:</span> {scenario.sampleConflict.claimB}
+                    <p className="p-2 rounded-lg bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 font-medium text-slate-800 dark:text-slate-200">
+                      <span className="text-rose-500 font-bold">B:</span> {scenario.sampleConflict.claimB}
                     </p>
                   </div>
                 </div>
-                <div className="text-[11px] font-mono text-rose-300 bg-rose-950/50 px-2.5 py-1.5 rounded-xl border border-rose-800/40">
+                <div className="text-[11px] font-mono text-rose-700 dark:text-rose-300 bg-rose-500/10 dark:bg-rose-950/50 px-2.5 py-1.5 rounded-xl border border-rose-500/30">
                   {scenario.sampleConflict.action}
                 </div>
               </div>
 
               {/* Card 3: Outdated */}
-              <div className="p-5 rounded-2xl bg-indigo-950/15 border border-indigo-500/40 flex flex-col justify-between space-y-3 relative group hover:border-indigo-500 transition-all">
+              <div className="p-5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-950/20 border border-indigo-500/40 flex flex-col justify-between space-y-3 relative group hover:border-indigo-500 transition-all">
                 <div>
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-indigo-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="text-indigo-600 dark:text-indigo-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>Cycle Warning</span>
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">
                       Temporal Risk
                     </span>
                   </div>
-                  <h4 className="text-sm font-heading font-bold text-white mb-1">
+                  <h4 className={`text-sm font-heading font-bold mb-1 ${isDark ? "text-white" : "text-slate-900"}`}>
                     {scenario.sampleOutdated.source}
                   </h4>
-                  <p className="text-xs text-indigo-300 font-mono font-semibold mb-1.5">
+                  <p className="text-xs text-indigo-600 dark:text-indigo-300 font-mono font-semibold mb-1.5">
                     Cycle: {scenario.sampleOutdated.cycle}
                   </p>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className={`text-xs leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>
                     {scenario.sampleOutdated.reason}
                   </p>
                 </div>
-                <div className="text-[11px] font-mono text-indigo-300 bg-indigo-950/50 px-2.5 py-1.5 rounded-xl border border-indigo-800/40">
+                <div className="text-[11px] font-mono text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-950/50 px-2.5 py-1.5 rounded-xl border border-indigo-500/30">
                   Status: Potentially Outdated
                 </div>
               </div>
@@ -504,8 +542,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Simulator Action Callout */}
-            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-800/80">
-              <span className="text-xs text-slate-400 font-medium">
+            <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-slate-200 dark:border-slate-800/80">
+              <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Want to run this full audit scenario live with interactive checklists and downloadable report?
               </span>
               <button
@@ -524,24 +562,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* STATS & CREDIBILITY RIBBON */}
-      <section className="py-10 bg-[#090d16]/90 border-y border-slate-800/80">
+      <section className="py-10 border-y border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#090d16]/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="p-4">
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-amber-400">100%</p>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1">Verbatim Grounding Snippets</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-amber-500">100%</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Verbatim Grounding Snippets</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-white">5 Stages</p>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1">Deterministic & AI Pipeline</p>
+              <p className={`text-3xl sm:text-4xl lg:text-5xl font-heading font-black ${isDark ? "text-white" : "text-slate-900"}`}>5 Stages</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Deterministic & AI Pipeline</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-cyan-400">4-Tier</p>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1">Temporal Freshness Matrix</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-cyan-600 dark:text-cyan-400">4-Tier</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Temporal Freshness Matrix</p>
             </div>
             <div className="p-4">
-              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-emerald-400">0%</p>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1">Hallucinated Citations</p>
+              <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-emerald-600 dark:text-emerald-400">0%</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Hallucinated Citations</p>
             </div>
           </div>
         </div>
@@ -552,26 +590,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* ============================================================== */}
       <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400 font-heading">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-500 font-heading">
             Architectural Differentiation
           </span>
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white mt-2">
+          <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold mt-2 ${isDark ? "text-white" : "text-slate-900"}`}>
             Why Generic AI Summarizers Fail Serious Research
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">
             Language models are trained to provide fluent answers, masking missing information with plausible hallucinations. Digital Dark Spot reverses this by enforcing strict negative proof.
           </p>
         </div>
 
         {/* Tab Switcher for Comparison */}
         <div className="flex justify-center mb-8">
-          <div className="p-1 rounded-2xl bg-slate-900 border border-slate-800 flex items-center gap-1">
+          <div className="p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center gap-1">
             <button
               onClick={() => setActiveTabComparison("chatbot")}
               className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTabComparison === "chatbot"
-                  ? "bg-rose-500/20 text-rose-300 border border-rose-500/40"
-                  : "text-slate-400 hover:text-white"
+                  ? "bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/40"
+                  : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
               ❌ Generic AI Chatbot / Summarizer
@@ -581,7 +619,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 activeTabComparison === "platform"
                   ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-500 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               ⚡ Digital Dark Spot Engine
@@ -592,22 +630,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
         {/* Comparison Display Box */}
         <div className="max-w-4xl mx-auto">
           {activeTabComparison === "chatbot" ? (
-            <div className="p-6 sm:p-8 rounded-3xl bg-rose-950/10 border border-rose-500/30 space-y-5 animate-fade-in">
+            <div className="p-6 sm:p-8 rounded-3xl bg-rose-50 dark:bg-rose-950/10 border border-rose-200 dark:border-rose-500/30 space-y-5 animate-fade-in">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                <div className="w-10 h-10 rounded-2xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-600 dark:text-rose-400">
                   <XCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-heading font-bold text-white">Traditional Chatbots & Summarizers</h3>
-                  <p className="text-xs text-rose-300 font-mono">Compresses text blindly • Incurs critical real-world blind spots</p>
+                  <h3 className={`text-base sm:text-lg font-heading font-bold ${isDark ? "text-white" : "text-slate-900"}`}>Traditional Chatbots & Summarizers</h3>
+                  <p className="text-xs text-rose-600 dark:text-rose-300 font-mono">Compresses text blindly • Incurs critical real-world blind spots</p>
                 </div>
               </div>
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-300 font-mono space-y-2">
-                <p className="text-slate-500">// Example Output from Generic Chatbot:</p>
-                <p className="text-rose-300 leading-relaxed">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-mono space-y-2">
+                <p className="text-slate-400">// Example Output from Generic Chatbot:</p>
+                <p className="text-rose-600 dark:text-rose-300 leading-relaxed font-sans">
                   "The scholarship deadline is November 10. Applicants must submit income certificates and marksheets to qualify."
                 </p>
-                <div className="pt-2 text-xs text-slate-400 space-y-1">
+                <div className="pt-2 text-xs text-slate-600 dark:text-slate-400 space-y-1 font-sans">
                   <p>❌ Silently overlooked that the state gazette extended the deadline to Nov 20.</p>
                   <p>❌ Never noticed that neither document stated the required Year 2 renewal GPA cutoff.</p>
                   <p>❌ Failed to warn that the INR 6L income cap was from a superseded 2023 archive.</p>
@@ -616,29 +654,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
               </div>
             </div>
           ) : (
-            <div className="p-6 sm:p-8 rounded-3xl bg-amber-950/15 border border-amber-500/40 space-y-5 animate-fade-in shadow-2xl shadow-amber-500/10">
+            <div className="p-6 sm:p-8 rounded-3xl bg-amber-50 dark:bg-amber-950/15 border border-amber-200 dark:border-amber-500/40 space-y-5 animate-fade-in shadow-xl">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
                   <CheckCheck className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-base sm:text-lg font-heading font-bold text-white">Digital Dark Spot Platform</h3>
-                  <p className="text-xs text-amber-300 font-mono">Negative-Proof Gap Engine • Cross-Source Verification Matrix</p>
+                  <h3 className={`text-base sm:text-lg font-heading font-bold ${isDark ? "text-white" : "text-slate-900"}`}>Digital Dark Spot Platform</h3>
+                  <p className="text-xs text-amber-700 dark:text-amber-300 font-mono">Negative-Proof Gap Engine • Cross-Source Verification Matrix</p>
                 </div>
               </div>
-              <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-slate-300 font-mono space-y-3">
-                <p className="text-slate-500">// Real Intelligence Output from Digital Dark Spot:</p>
-                <div className="space-y-2">
-                  <div className="p-3 rounded-xl bg-amber-950/30 border border-amber-500/30 text-amber-200">
+              <div className="p-4 rounded-2xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-mono space-y-3">
+                <p className="text-slate-400">// Real Intelligence Output from Digital Dark Spot:</p>
+                <div className="space-y-2 font-sans">
+                  <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-900 dark:text-amber-200">
                     <b>⚠️ 2 GAPS IDENTIFIED:</b> "Not found in the sources reviewed. The renewal CGPA threshold is absent across all 4 portals."
                   </div>
-                  <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-200">
+                  <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-900 dark:text-rose-200">
                     <b>⚡ 2 CONFLICTS FLAGGED:</b> "Deadline discrepancy: Nov 20 (Gazette) vs Nov 10 (Archive Bulletin). Traceable quotes provided."
                   </div>
-                  <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/30 text-indigo-200">
+                  <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-900 dark:text-indigo-200">
                     <b>⏳ 1 OUTDATED SOURCE:</b> "2023-2024 academic cycle bulletin superseded by active 2025-2026 regulations."
                   </div>
-                  <div className="p-3 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-emerald-200">
+                  <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 dark:text-emerald-200">
                     <b>📋 ESCALATION CHECKLIST:</b> "4 targeted verification steps with State Scholarship Helpdesk contacts."
                   </div>
                 </div>
@@ -651,16 +689,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* ============================================================== */}
       {/* 5-STAGE PIPELINE INTERACTIVE ARCHITECTURE INSPECTOR             */}
       {/* ============================================================== */}
-      <section id="how-it-works" className="py-16 sm:py-24 bg-[#080c16]/90 border-t border-slate-800/80">
+      <section id="how-it-works" className="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-[#080c16]/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400 font-heading">
+            <span className="text-xs uppercase font-extrabold tracking-widest text-amber-500 font-heading">
               Deterministic & AI Architecture
             </span>
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white mt-2">
+            <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold mt-2 ${isDark ? "text-white" : "text-slate-900"}`}>
               The 5-Stage Verification Pipeline
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 mt-2">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">
               Click any stage below to inspect the internal logic and verifiable output contracts.
             </p>
           </div>
@@ -673,15 +711,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
                 onClick={() => setActivePipelineStage(idx)}
                 className={`p-3 sm:p-4 rounded-2xl text-left transition-all border cursor-pointer ${
                   activePipelineStage === idx
-                    ? "bg-amber-500/15 border-amber-500 text-white shadow-lg shadow-amber-500/10"
-                    : "bg-slate-900/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    ? "bg-amber-500/15 border-amber-500 text-amber-600 dark:text-white shadow-md shadow-amber-500/10 font-bold"
+                    : isDark
+                    ? "bg-slate-900/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    : "bg-white border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 shadow-xs"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-xs font-mono font-bold ${activePipelineStage === idx ? "text-amber-400" : "text-slate-500"}`}>
+                  <span className={`text-xs font-mono font-bold ${activePipelineStage === idx ? "text-amber-500" : "text-slate-400"}`}>
                     STAGE {stage.num}
                   </span>
-                  {activePipelineStage === idx && <Sparkles className="w-3.5 h-3.5 text-amber-400" />}
+                  {activePipelineStage === idx && <Sparkles className="w-3.5 h-3.5 text-amber-500" />}
                 </div>
                 <p className="text-xs sm:text-sm font-bold line-clamp-2 leading-snug">
                   {stage.title}
@@ -691,28 +731,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Active Stage Detail Showcase */}
-          <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-amber-500/30 max-w-4xl mx-auto animate-fade-in">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
+          <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-amber-500/30 max-w-4xl mx-auto animate-fade-in shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
               <div>
-                <span className="text-xs font-mono text-amber-400 font-bold uppercase">
+                <span className="text-xs font-mono text-amber-500 font-bold uppercase">
                   Stage {pipelineStages[activePipelineStage].num} Specification
                 </span>
-                <h3 className="text-lg sm:text-xl font-heading font-bold text-white mt-0.5">
+                <h3 className={`text-lg sm:text-xl font-heading font-bold mt-0.5 ${isDark ? "text-white" : "text-slate-900"}`}>
                   {pipelineStages[activePipelineStage].title}
                 </h3>
               </div>
-              <span className="px-3 py-1 rounded-full bg-slate-900 border border-slate-700 text-xs font-mono text-slate-300 self-start sm:self-auto">
+              <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-700 dark:text-slate-300 self-start sm:self-auto">
                 {pipelineStages[activePipelineStage].tag}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? "text-slate-300" : "text-slate-700"}`}>
               {pipelineStages[activePipelineStage].desc}
             </p>
-            <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+            <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs text-slate-500 font-mono">
               <span>Safety Guarantee: SSRF Defense & Schema Enforcement</span>
               <button
                 onClick={() => onNavigate("research")}
-                className="text-amber-400 hover:text-amber-300 font-bold flex items-center gap-1 cursor-pointer"
+                className="text-amber-600 dark:text-amber-400 hover:underline font-bold flex items-center gap-1 cursor-pointer"
               >
                 <span>Test in Workspace</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -728,10 +768,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* ============================================================== */}
       <section className="py-16 sm:py-24 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400 font-heading">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-500 font-heading">
             Frequently Asked Questions
           </span>
-          <h3 className="text-2xl sm:text-4xl font-heading font-extrabold text-white mt-2">
+          <h3 className={`text-2xl sm:text-4xl font-heading font-extrabold mt-2 ${isDark ? "text-white" : "text-slate-900"}`}>
             Responsible AI & Operational Integrity
           </h3>
         </div>
@@ -740,23 +780,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
           {faqs.map((faq, idx) => (
             <div
               key={idx}
-              className="rounded-2xl glass-panel border border-slate-800/80 overflow-hidden transition-all"
+              className="rounded-2xl glass-panel border overflow-hidden transition-all"
             >
               <button
                 onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-900/40 transition-colors"
+                className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors"
               >
-                <span className="text-xs sm:text-sm font-heading font-bold text-white">
+                <span className={`text-xs sm:text-sm font-heading font-bold ${isDark ? "text-white" : "text-slate-900"}`}>
                   {faq.q}
                 </span>
                 <ChevronDown
-                  className={`w-4 h-4 text-amber-400 shrink-0 transition-transform duration-300 ${
+                  className={`w-4 h-4 text-amber-500 shrink-0 transition-transform duration-300 ${
                     openFaq === idx ? "rotate-180" : ""
                   }`}
                 />
               </button>
               {openFaq === idx && (
-                <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/50 animate-fade-in font-normal">
+                <div className={`px-5 pb-5 pt-1 text-xs sm:text-sm leading-relaxed border-t border-slate-200 dark:border-slate-800/50 animate-fade-in font-normal ${
+                  isDark ? "text-slate-300" : "text-slate-600"
+                }`}>
                   {faq.a}
                 </div>
               )}
@@ -768,12 +810,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
       {/* ============================================================== */}
       {/* BOTTOM CTA BANNER                                              */}
       {/* ============================================================== */}
-      <section className="py-16 bg-gradient-to-b from-[#07090e] to-slate-950 border-t border-slate-800/80">
+      <section className="py-16 border-t border-slate-200 dark:border-slate-800/80 bg-gradient-to-b from-transparent to-amber-500/5">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white leading-tight">
+          <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>
             Stop guessing what your sources missed.
           </h2>
-          <p className="text-xs sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Run your first cross-source information gap analysis now. Compare multiple circulars, spot contradictory eligibility rules, and receive an executive verification audit.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
@@ -786,44 +828,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate }) => {
             <button
               onClick={handleRunDemo}
               disabled={loadingDemo}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-900 border border-slate-700 hover:border-amber-500/50 text-white font-bold text-sm transition-all hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
+              className={`w-full sm:w-auto px-8 py-4 rounded-2xl border font-bold text-sm transition-all hover:scale-105 cursor-pointer flex items-center justify-center gap-2 ${
+                isDark
+                  ? "bg-slate-900 border-slate-700 hover:border-amber-500/50 text-white"
+                  : "bg-white border-slate-300 hover:border-amber-500 text-slate-900 shadow-xs"
+              }`}
             >
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>{loadingDemo ? "Analyzing Demo..." : "Run Sample Scholarship Audit"}</span>
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>{loadingDemo ? "Analyzing..." : "Run Sample Scholarship Audit"}</span>
             </button>
           </div>
         </div>
       </section>
-
-      {/* ============================================================== */}
-      {/* FLOATING QUICK-ACTION BOTTOM DOCK FOR MOBILE & DESKTOP         */}
-      {/* ============================================================== */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-lg w-[92%] sm:w-auto">
-        <div className="p-2 rounded-2xl bg-[#090d18]/90 border border-amber-500/30 shadow-2xl backdrop-blur-2xl flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
-          <button
-            onClick={() => onNavigate("research")}
-            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-heading font-bold text-xs flex items-center gap-1.5 shadow-md shadow-amber-500/20 cursor-pointer transition-transform active:scale-95 shrink-0"
-          >
-            <Search className="w-3.5 h-3.5" />
-            <span>New Research</span>
-          </button>
-          <button
-            onClick={handleRunDemo}
-            disabled={loadingDemo}
-            className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-amber-300 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-transform active:scale-95"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>{loadingDemo ? "Loading..." : "Test Demo"}</span>
-          </button>
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="px-3 py-2 rounded-xl text-slate-400 hover:text-white text-xs font-mono transition-colors cursor-pointer"
-            title="Scroll to top"
-          >
-            ↑ Top
-          </button>
-        </div>
-      </div>
 
     </div>
   );

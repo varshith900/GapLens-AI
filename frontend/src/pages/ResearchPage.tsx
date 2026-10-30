@@ -26,6 +26,7 @@ import type { UserProfile } from "../types";
 interface ResearchPageProps {
   user: UserProfile | null;
   onNavigate: (view: string, param?: string) => void;
+  theme?: "dark" | "light";
 }
 
 const CATEGORIES = [
@@ -45,7 +46,7 @@ const DEMO_PRESET_URLS = [
   "https://scholarships-disbursement-faq.edu/faqs-general"
 ];
 
-export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) => {
+export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate, theme = "dark" }) => {
   const [topic, setTopic] = useState("");
   const [question, setQuestion] = useState("");
   const [category, setCategory] = useState("Education");
@@ -59,6 +60,8 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
   const [submitError, setSubmitError] = useState("");
   const [progressStage, setProgressStage] = useState<string>("");
   const [progressPercent, setProgressPercent] = useState<number>(0);
+
+  const isDark = theme === "dark";
 
   const handleAddUrl = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -154,19 +157,19 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 animate-fade-in">
       
       {/* Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 sm:pb-8 border-b border-slate-800 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 sm:pb-8 border-b border-slate-200 dark:border-slate-800 gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+          <div className="inline-flex items-center gap-2 text-amber-500 text-xs font-bold uppercase tracking-wider mb-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
             <FileSearch className="w-3.5 h-3.5" />
             <span>Research Workspace</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-white">
+          <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold ${isDark ? "text-white" : "text-slate-900"}`}>
             Initiate Cross-Source Investigation
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-2xl leading-relaxed">
             Provide your research objective and multiple reference URLs. The multi-stage AI engine will detect missing conditions, conflicting requirements, and expired deadlines.
           </p>
         </div>
@@ -174,15 +177,15 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
         {/* Demo Preset Trigger */}
         <button
           onClick={handleLoadDemoPreset}
-          className="self-start md:self-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/20 to-amber-600/15 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/35 text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-md hover:scale-[1.02] cursor-pointer shrink-0"
+          className="self-start md:self-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/20 to-amber-600/15 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/35 text-amber-600 dark:text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-sm hover:scale-[1.02] cursor-pointer shrink-0"
         >
-          <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: "12s" }} />
+          <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: "12s" }} />
           <span>Load Scholarship Demonstration</span>
         </button>
       </div>
 
       {submitError && (
-        <div className="mt-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs sm:text-sm flex items-center gap-3 animate-fade-in">
+        <div className="mt-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs sm:text-sm flex items-center gap-3 animate-fade-in font-medium">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{submitError}</span>
         </div>
@@ -193,8 +196,8 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
         <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
           <div className="max-w-md w-full p-8 rounded-3xl glass-panel-glow border border-amber-500/40 shadow-2xl text-center space-y-5 animate-fade-in">
             <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-              <Loader2 className="w-20 h-20 text-amber-400 animate-spin" />
-              <Layers className="w-8 h-8 text-amber-300 absolute" />
+              <Loader2 className="w-20 h-20 text-amber-500 animate-spin" />
+              <Layers className="w-8 h-8 text-amber-400 absolute" />
             </div>
             
             <div>
@@ -226,20 +229,20 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
         
         {/* Left Column: Research Objective & Categorization */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="p-5 sm:p-7 rounded-3xl glass-panel border border-slate-800/90 space-y-6">
+          <div className="p-5 sm:p-7 rounded-3xl glass-panel border space-y-6">
             
             <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
+              <h2 className={`text-base sm:text-lg font-heading font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-slate-900"}`}>
                 <span>1. Research Objective</span>
               </h2>
-              <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+              <span className="text-[10px] text-amber-500 font-bold px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
                 Required
               </span>
             </div>
 
             {/* Topic Input */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className={`block text-xs font-bold mb-1.5 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                 Research Topic
               </label>
               <input
@@ -247,13 +250,17 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 placeholder="e.g., Government Scholarship Application / Cloud Database Migration"
-                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                className={`w-full px-4 py-3 rounded-2xl border text-sm transition-colors focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 ${
+                  isDark
+                    ? "bg-slate-950/80 border-slate-800 text-white placeholder-slate-500"
+                    : "bg-white border-slate-200 text-slate-900 placeholder-slate-400 shadow-xs"
+                }`}
               />
             </div>
 
             {/* Category Selector with interactive buttons */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-2">
+              <label className={`block text-xs font-bold mb-2 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                 Research Domain Category
               </label>
               <div className="flex flex-wrap gap-2">
@@ -268,7 +275,9 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                       className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                         isSelected
                           ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20 scale-[1.02]"
-                          : "bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800"
+                          : isDark
+                          ? "bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800"
+                          : "bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 shadow-xs"
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -281,7 +290,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
 
             {/* Research Question / Objective */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className={`block text-xs font-bold mb-1.5 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                 Primary Question / Decision Objective
               </label>
               <textarea
@@ -289,36 +298,44 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="What critical conditions, deadlines, document requirements, and renewal terms must be verified?"
-                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors resize-none leading-relaxed"
+                className={`w-full px-4 py-3 rounded-2xl border text-sm transition-colors resize-none leading-relaxed focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 ${
+                  isDark
+                    ? "bg-slate-950/80 border-slate-800 text-white placeholder-slate-500"
+                    : "bg-white border-slate-200 text-slate-900 placeholder-slate-400 shadow-xs"
+                }`}
               />
-              <p className="text-[11px] text-slate-400 mt-1.5">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
                 The AI compares all retrieved documents directly against this question to identify omissions.
               </p>
             </div>
 
             {/* Additional Context */}
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                Additional Constraints or Profile <span className="text-slate-500 font-normal">(Optional)</span>
+              <label className={`block text-xs font-bold mb-1.5 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
+                Additional Constraints or Profile <span className="text-slate-400 font-normal">(Optional)</span>
               </label>
               <input
                 type="text"
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
                 placeholder="e.g., Undergraduate student with household income below 8 Lakhs"
-                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                className={`w-full px-4 py-3 rounded-2xl border text-sm transition-colors focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 ${
+                  isDark
+                    ? "bg-slate-950/80 border-slate-800 text-white placeholder-slate-500"
+                    : "bg-white border-slate-200 text-slate-900 placeholder-slate-400 shadow-xs"
+                }`}
               />
             </div>
 
           </div>
 
           {/* Evidence Guarantee Banner */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-slate-300 text-xs space-y-1.5">
-            <div className="flex items-center gap-2 font-bold text-amber-400">
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs space-y-1.5">
+            <div className="flex items-center gap-2 font-bold text-amber-500">
               <ShieldCheck className="w-4 h-4" />
               <span>Evidence Grounding Guarantee</span>
             </div>
-            <p className="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-[11px] sm:text-xs">
               Every source claim is bound to verbatim quotes and live URLs. Missing information is never fabricated—it is transparently noted as: <i>"Not found in the sources reviewed."</i>
             </p>
           </div>
@@ -326,13 +343,13 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
 
         {/* Right Column: Source Collection Engine */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-5 sm:p-7 rounded-3xl glass-panel border border-slate-800/90 space-y-5">
+          <div className="p-5 sm:p-7 rounded-3xl glass-panel border space-y-5">
             
             <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
+              <h2 className={`text-base sm:text-lg font-heading font-bold flex items-center gap-2 ${isDark ? "text-white" : "text-slate-900"}`}>
                 <span>2. Reference Sources</span>
               </h2>
-              <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-slate-800/80 text-amber-300 border border-slate-700 font-bold">
+              <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/25 font-bold">
                 {sources.length} Added
               </span>
             </div>
@@ -341,7 +358,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
             <form onSubmit={handleAddUrl} className="space-y-2">
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Globe className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+                  <Globe className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
                   <input
                     type="url"
                     value={currentUrl}
@@ -350,7 +367,11 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                       setUrlError("");
                     }}
                     placeholder="https://example.gov.in/guidelines"
-                    className="w-full pl-10 pr-3 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors font-mono"
+                    className={`w-full pl-10 pr-3 py-3 rounded-2xl border text-xs sm:text-sm font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors ${
+                      isDark
+                        ? "bg-slate-950/80 border-slate-800 text-white placeholder-slate-500"
+                        : "bg-white border-slate-200 text-slate-900 placeholder-slate-400 shadow-xs"
+                    }`}
                   />
                 </div>
                 <button
@@ -363,7 +384,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
               </div>
 
               {urlError && (
-                <p className="text-[11px] text-rose-400 flex items-center gap-1.5 pt-1 animate-fade-in font-medium">
+                <p className="text-[11px] text-rose-500 flex items-center gap-1.5 pt-1 animate-fade-in font-medium">
                   <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                   <span>{urlError}</span>
                 </p>
@@ -373,10 +394,10 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
             {/* Scrollable list of Added Sources */}
             <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
               {sources.length === 0 ? (
-                <div className="py-10 text-center border border-dashed border-slate-800 rounded-2xl space-y-2">
-                  <Globe className="w-8 h-8 text-slate-600 mx-auto" />
-                  <p className="text-xs font-semibold text-slate-400">No source URLs added yet</p>
-                  <p className="text-[11px] text-slate-500">
+                <div className="py-10 text-center border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl space-y-2">
+                  <Globe className="w-8 h-8 text-slate-400 mx-auto" />
+                  <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">No source URLs added yet</p>
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
                     Paste public web pages or click "Load Scholarship Demonstration" above
                   </p>
                 </div>
@@ -384,20 +405,27 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                 sources.map((url, idx) => (
                   <div
                     key={idx}
-                    className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 flex items-center justify-between gap-3 text-xs group hover:border-slate-700 transition-all card-hover-lift"
+                    className={`p-3 sm:p-3.5 rounded-2xl border flex items-center justify-between gap-3 text-xs transition-all card-hover-lift ${
+                      isDark
+                        ? "bg-slate-950/80 border-slate-800/90 hover:border-slate-700"
+                        : "bg-white border-slate-200 hover:border-slate-300 shadow-xs"
+                    }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-[11px] font-mono text-amber-400 flex items-center justify-center shrink-0 font-bold">
+                      <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-[11px] font-mono text-amber-500 flex items-center justify-center shrink-0 font-bold">
                         {idx + 1}
                       </span>
-                      <span className="font-mono text-slate-300 truncate text-[11px]">
-                        {url}
-                      </span>
+                      <div className="truncate">
+                        <p className={`font-mono text-xs truncate ${isDark ? "text-slate-200" : "text-slate-800"}`}>
+                          {url}
+                        </p>
+                        <span className="text-[10px] text-slate-400">Ready for automated extraction</span>
+                      </div>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleRemoveUrl(idx)}
-                      className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition-colors cursor-pointer shrink-0"
+                      className="p-1.5 rounded-xl text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 transition-colors shrink-0 cursor-pointer"
                       title="Remove source"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -407,26 +435,25 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
               )}
             </div>
 
-            {/* Launch Analysis Button */}
-            <button
-              type="button"
-              onClick={handleStartAnalysis}
-              disabled={isSubmitting || sources.length === 0}
-              className={`w-full py-4 rounded-2xl font-bold text-sm transition-all duration-300 shadow-xl flex items-center justify-center gap-2.5 cursor-pointer ${
-                sources.length === 0
-                  ? "bg-slate-800 text-slate-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 shadow-amber-500/25 hover:scale-[1.02]"
-              }`}
-            >
-              <Sparkles className="w-4 h-4 text-slate-950" />
-              <span>Cross-Analyze Sources & Detect Gaps</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {/* Launch Intelligence Analysis Button */}
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={handleStartAnalysis}
+                disabled={isSubmitting}
+                className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-heading font-black text-sm shadow-xl shadow-amber-500/25 transition-all duration-300 hover:scale-[1.02] flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950" />
+                <span>Begin Multi-Stage Intelligence Analysis</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
 
           </div>
         </div>
 
       </div>
+
     </div>
   );
 };
