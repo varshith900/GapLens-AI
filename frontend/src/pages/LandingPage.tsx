@@ -30,7 +30,17 @@ import {
   RefreshCw,
   Compass,
   FileCheck2,
-  AlertCircle
+  AlertCircle,
+  TrendingUp,
+  Cpu,
+  BarChart3,
+  Network,
+  Terminal,
+  Activity,
+  Radar,
+  Radio,
+  FileSearch,
+  BookOpen
 } from "lucide-react";
 import { loadDemoScenario } from "../services/api";
 
@@ -47,17 +57,34 @@ const ROTATING_HIGHLIGHTS = [
   "Back every single finding with traceable verbatim grounding quotes"
 ];
 
+const TERMINAL_LOGS = [
+  { time: "00:00.8s", tag: "INGEST", text: "Ingesting 4 source URLs • SSRF verification passed • 18,450 words normalized", color: "text-cyan-400" },
+  { time: "00:01.5s", tag: "STAGE 1", text: "Isolating factual claims • Extracted 24 verifiable propositions with verbatim quotes", color: "text-emerald-400" },
+  { time: "00:02.3s", tag: "STAGE 2", text: "Cross-matching application deadlines... CONTRADICTION: Nov 20 (Gazette) vs Nov 10 (Archive)", color: "text-rose-400" },
+  { time: "00:03.1s", tag: "STAGE 3", text: "Executing negative-proof audit... SILENT GAP: Renewal CGPA requirement absent in 4/4 portals", color: "text-amber-400" },
+  { time: "00:03.8s", tag: "STAGE 4", text: "Temporal analysis... Archive bulletin flagged as superseded (2023-2024 academic cycle)", color: "text-indigo-400" },
+  { time: "00:04.6s", tag: "STAGE 5", text: "Synthesis complete: 2 Gaps, 2 Conflicts, 1 Outdated Source • Executive PDF compiled", color: "text-emerald-400" }
+];
+
 const DEMO_SCENARIOS = {
   scholarship: {
     id: "scholarship",
     name: "Government Scholarship",
-    badge: "Education",
+    badge: "Education & Public Services",
     icon: GraduationCap,
+    completeness: 68,
+    darkSpotIndex: 32,
     question: "What should a student verify before applying for a national or state merit scholarship?",
     sourcesCount: 4,
     gapsCount: 2,
     conflictsCount: 2,
     outdatedCount: 1,
+    sourcesList: [
+      { id: "S1", name: "State Gazette Higher Ed Notification", date: "Oct 2025 (Active)", status: "Active Official", tag: "emerald" },
+      { id: "S2", name: "Student Welfare Archive Bulletin", date: "Sep 2023 (Expired)", status: "Superseded", tag: "indigo" },
+      { id: "S3", name: "National Merit Scholarship Portal", date: "Aug 2025", status: "Verified", tag: "emerald" },
+      { id: "S4", name: "University Financial Aid FAQ", date: "Undated 2024", status: "Omission Alert", tag: "amber" }
+    ],
     sampleGap: {
       title: "Scholarship Renewal Grade Maintenance",
       desc: "None of the 4 reviewed portals state the minimum CGPA, attendance cutoff, or backlog allowance required to renew grant disbursement in Year 2.",
@@ -65,7 +92,7 @@ const DEMO_SCENARIOS = {
     },
     sampleConflict: {
       title: "Conflicting Application Deadlines",
-      claimA: "Nov 20, 2025 (State Higher Ed Circular)",
+      claimA: "Nov 20, 2025 (State Higher Ed Gazette)",
       claimB: "Nov 10, 2023 (Student Welfare Archive Bulletin)",
       action: "Verify against the active 2025-2026 gazette notification."
     },
@@ -78,13 +105,20 @@ const DEMO_SCENARIOS = {
   cloud: {
     id: "cloud",
     name: "Enterprise Database Migration",
-    badge: "Technology",
+    badge: "Technology Architecture",
     icon: Cloud,
+    completeness: 72,
+    darkSpotIndex: 28,
     question: "What compliance and failover criteria are required before migrating to Aurora PostgreSQL?",
     sourcesCount: 3,
     gapsCount: 2,
     conflictsCount: 1,
     outdatedCount: 1,
+    sourcesList: [
+      { id: "S1", name: "Cloud Provider Architecture Whitepaper", date: "Jan 2025", status: "Active Official", tag: "emerald" },
+      { id: "S2", name: "PostgreSQL 13 End-of-Life Advisory", date: "Feb 2023 (Legacy)", status: "Superseded", tag: "indigo" },
+      { id: "S3", name: "Engineering Production Migration Log", date: "Nov 2024", status: "Discrepancy", tag: "rose" }
+    ],
     sampleGap: {
       title: "HIPAA BAA Multi-Region Encryption Keys",
       desc: "Vendor architectural documentation fails to detail multi-region KMS replication protocols during regional failover state.",
@@ -105,13 +139,21 @@ const DEMO_SCENARIOS = {
   clinical: {
     id: "clinical",
     name: "Clinical Oncology Protocol",
-    badge: "Healthcare",
+    badge: "Healthcare & Life Sciences",
     icon: Stethoscope,
+    completeness: 64,
+    darkSpotIndex: 36,
     question: "What exclusion criteria and biomarker thresholds apply for the Phase-II oncology trial?",
     sourcesCount: 4,
     gapsCount: 1,
     conflictsCount: 2,
     outdatedCount: 1,
+    sourcesList: [
+      { id: "S1", name: "ClinicalTrials.gov Protocol Registry", date: "Sep 2025 (Active)", status: "Active Registry", tag: "emerald" },
+      { id: "S2", name: "Phase I Preliminary Cohort Advisory", date: "Mar 2022 (Archive)", status: "Superseded", tag: "indigo" },
+      { id: "S3", name: "Institutional Ethics Committee Circular", date: "Aug 2025", status: "Conflict Alert", tag: "rose" },
+      { id: "S4", name: "Hospital Trial Patient Information Sheet", date: "Jul 2025", status: "Gap Alert", tag: "amber" }
+    ],
     sampleGap: {
       title: "Prior Immunotherapy Washout Period",
       desc: "The reviewed trial summary does not state the mandatory clearance window for prior checkpoint inhibitor therapy.",
@@ -140,6 +182,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
   const [activePipelineStage, setActivePipelineStage] = useState<number>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [heroSearchInput, setHeroSearchInput] = useState("");
+  const [activeRadarNode, setActiveRadarNode] = useState<number>(0);
+  const [activeLogIndex, setActiveLogIndex] = useState(0);
 
   const isDark = theme === "dark";
 
@@ -147,8 +191,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
   useEffect(() => {
     const timer = setInterval(() => {
       setHighlightIdx((prev) => (prev + 1) % ROTATING_HIGHLIGHTS.length);
-    }, 3800);
+    }, 4000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Terminal log auto-ticker
+  useEffect(() => {
+    const logTimer = setInterval(() => {
+      setActiveLogIndex((prev) => (prev + 1) % TERMINAL_LOGS.length);
+    }, 2800);
+    return () => clearInterval(logTimer);
+  }, []);
+
+  // Radar node auto-cycle
+  useEffect(() => {
+    const radarTimer = setInterval(() => {
+      setActiveRadarNode((prev) => (prev + 1) % 4);
+    }, 3500);
+    return () => clearInterval(radarTimer);
   }, []);
 
   const showToast = (msg: string) => {
@@ -167,7 +227,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
         showToast("Analysis complete! Rendering verified findings...");
         setTimeout(() => {
           onNavigate("results", res.research_id);
-        }, 400);
+        }, 350);
       }
     } catch (e) {
       console.error(e);
@@ -250,19 +310,53 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
       )}
 
       {/* Dynamic Ambient Background Glows */}
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[350px] sm:w-[750px] lg:w-[1100px] h-[500px] bg-gradient-to-b from-amber-500/20 via-indigo-600/15 to-transparent blur-[140px] rounded-full pointer-events-none animate-pulse-slow"></div>
-      <div className="absolute top-96 -left-32 w-[300px] sm:w-[500px] h-[400px] bg-cyan-500/10 blur-[130px] rounded-full pointer-events-none animate-float"></div>
-      <div className="absolute top-[800px] -right-32 w-[300px] sm:w-[500px] h-[400px] bg-rose-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[380px] sm:w-[850px] lg:w-[1300px] h-[600px] bg-gradient-to-b from-amber-500/20 via-indigo-600/15 to-transparent blur-[140px] rounded-full pointer-events-none animate-aurora-drift"></div>
+      <div className="absolute top-96 -left-32 w-[300px] sm:w-[500px] h-[450px] bg-cyan-500/10 blur-[140px] rounded-full pointer-events-none animate-float"></div>
+      <div className="absolute top-[850px] -right-32 w-[300px] sm:w-[500px] h-[450px] bg-rose-500/10 blur-[140px] rounded-full pointer-events-none"></div>
 
       {/* ============================================================== */}
       {/* HERO SECTION WITH DYNAMIC ROTATING TICKER & SEARCH SCANNER     */}
       {/* ============================================================== */}
-      <section className="relative pt-12 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative pt-10 pb-16 sm:pt-18 sm:pb-24 lg:pt-20 lg:pb-28 z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
           
+          {/* FLOATING MICRO-WIDGET: Contradiction Alert (Left) */}
+          <div className="hidden xl:flex items-center gap-3 p-3.5 rounded-2xl glass-panel-elevated border border-rose-500/40 shadow-2xl max-w-xs absolute left-2 top-12 animate-float-left">
+            <div className="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5 animate-pulse" />
+            </div>
+            <div className="text-left text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-rose-500">
+                <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                <span>Contradiction Flagged</span>
+              </div>
+              <p className="text-[11px] text-slate-700 dark:text-slate-300 font-medium truncate mt-0.5">
+                Nov 20 (Gazette) vs Nov 10 (Archive)
+              </p>
+              <span className="text-[9px] font-mono text-rose-400 mt-1 block">Cross-Source Discrepancy Found</span>
+            </div>
+          </div>
+
+          {/* FLOATING MICRO-WIDGET: Silent Gap Alert (Right) */}
+          <div className="hidden xl:flex items-center gap-3 p-3.5 rounded-2xl glass-panel-elevated border border-amber-500/40 shadow-2xl max-w-xs absolute right-2 top-12 animate-float-right">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-5 h-5 animate-bounce" />
+            </div>
+            <div className="text-left text-xs">
+              <div className="flex items-center gap-1.5 font-bold text-amber-500">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+                <span>Critical Information Gap</span>
+              </div>
+              <p className="text-[11px] text-slate-700 dark:text-slate-300 font-medium truncate mt-0.5">
+                Renewal GPA Cutoff Missing in 4 Portals
+              </p>
+              <span className="text-[9px] font-mono text-amber-400 mt-1 block">Strict Negative Proof Verified</span>
+            </div>
+          </div>
+
           {/* Eyebrow badge */}
           <div
-            className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold mb-6 sm:mb-8 transition-all hover:scale-105 cursor-default ${
+            className={`inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold mb-6 transition-all hover:scale-105 cursor-default ${
               isDark
                 ? "bg-slate-900/90 border-amber-500/35 text-amber-300 shadow-xl shadow-amber-500/10"
                 : "bg-white border-amber-500/40 text-amber-700 shadow-md shadow-amber-500/10"
@@ -305,7 +399,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
 
           {/* Subtitle */}
           <p
-            className={`text-sm sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-normal ${
+            className={`text-sm sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-8 font-normal ${
               isDark ? "text-slate-300" : "text-slate-600"
             }`}
           >
@@ -313,20 +407,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
           </p>
 
           {/* HERO QUICK-LAUNCH SEARCH SCANNER BAR */}
-          <div className="max-w-3xl mx-auto mb-14">
+          <div className="max-w-3xl mx-auto mb-10">
             <form
               onSubmit={handleHeroSearch}
-              className={`p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center gap-2 transition-all ${
+              className={`p-2 sm:p-2.5 rounded-2xl sm:rounded-3xl border shadow-2xl backdrop-blur-xl flex flex-col sm:flex-row items-center gap-2 transition-all animate-border-glow ${
                 isDark
-                  ? "bg-slate-900/90 border-amber-500/35 focus-within:border-amber-400"
-                  : "bg-white border-slate-300 focus-within:border-amber-500 shadow-slate-200/50"
+                  ? "bg-slate-900/90"
+                  : "bg-white shadow-slate-200/50"
               }`}
             >
               <div className="flex items-center gap-3 w-full px-3 py-2 text-left">
                 <Search className="w-5 h-5 text-amber-500 shrink-0" />
                 <input
                   type="text"
-                  placeholder="Enter a research topic, query, or website URL..."
+                  placeholder="Enter a research topic, question, or website URL..."
                   value={heroSearchInput}
                   onChange={(e) => setHeroSearchInput(e.target.value)}
                   className={`w-full bg-transparent text-sm sm:text-base placeholder-slate-400 focus:outline-none ${
@@ -352,12 +446,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 type="button"
                 onClick={() => {
                   setActiveScenarioKey("scholarship");
-                  handleRunDemo();
+                  showToast("Loaded Post-Matric Scholarship audit preset");
                 }}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
-                  isDark
-                    ? "bg-slate-900/80 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border-slate-800 hover:border-amber-500/40"
-                    : "bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border-slate-200 hover:border-amber-300 shadow-xs"
+                  activeScenarioKey === "scholarship"
+                    ? "bg-amber-500 text-slate-950 border-amber-500 font-bold shadow-md shadow-amber-500/20"
+                    : isDark
+                    ? "bg-slate-900/80 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border-slate-800"
+                    : "bg-white hover:bg-amber-50 text-slate-700 hover:text-amber-800 border-slate-200 shadow-xs"
                 }`}
               >
                 🎓 Post-Matric Scholarship
@@ -366,12 +462,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 type="button"
                 onClick={() => {
                   setActiveScenarioKey("cloud");
-                  showToast("Switched to Enterprise Database Migration scenario");
+                  showToast("Loaded Enterprise Database Migration preset");
                 }}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
-                  isDark
-                    ? "bg-slate-900/80 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border-slate-800 hover:border-cyan-500/40"
-                    : "bg-white hover:bg-cyan-50 text-slate-700 hover:text-cyan-800 border-slate-200 hover:border-cyan-300 shadow-xs"
+                  activeScenarioKey === "cloud"
+                    ? "bg-cyan-500 text-slate-950 border-cyan-500 font-bold shadow-md shadow-cyan-500/20"
+                    : isDark
+                    ? "bg-slate-900/80 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 border-slate-800"
+                    : "bg-white hover:bg-cyan-50 text-slate-700 hover:text-cyan-800 border-slate-200 shadow-xs"
                 }`}
               >
                 ☁️ Cloud Aurora Migration
@@ -380,12 +478,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 type="button"
                 onClick={() => {
                   setActiveScenarioKey("clinical");
-                  showToast("Switched to Clinical Trial Oncology scenario");
+                  showToast("Loaded Clinical Oncology Protocol preset");
                 }}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
-                  isDark
-                    ? "bg-slate-900/80 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border-slate-800 hover:border-rose-500/40"
-                    : "bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 border-slate-200 hover:border-rose-300 shadow-xs"
+                  activeScenarioKey === "clinical"
+                    ? "bg-rose-500 text-white border-rose-500 font-bold shadow-md shadow-rose-500/20"
+                    : isDark
+                    ? "bg-slate-900/80 hover:bg-rose-500/20 text-slate-300 hover:text-rose-300 border-slate-800"
+                    : "bg-white hover:bg-rose-50 text-slate-700 hover:text-rose-800 border-slate-200 shadow-xs"
                 }`}
               >
                 🧬 Clinical Oncology Protocol
@@ -394,20 +494,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
           </div>
 
           {/* ============================================================== */}
-          {/* INTERACTIVE LIVE AUDIT SIMULATOR (PROMINENT HERO PLAYGROUND) */}
+          {/* THE DIGITAL DARK SPOT RADAR & LIVE HOLOGRAM HUD               */}
           {/* ============================================================== */}
-          <div className="max-w-5xl mx-auto rounded-3xl glass-panel-elevated p-5 sm:p-8 text-left border shadow-2xl relative overflow-hidden card-hover-lift">
+          <div className="max-w-5xl mx-auto rounded-3xl glass-panel-elevated p-5 sm:p-8 text-left border shadow-2xl relative overflow-hidden mb-12">
             
-            {/* Header with Live Scenario Selector Tabs */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-5 mb-6 gap-4">
+            {/* Animated Laser Scanline Line */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-scanline pointer-events-none"></div>
+
+            {/* Radar Header with Live Scenario Selector Tabs */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-4 mb-6 gap-3">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
-                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Interactive Engine Simulator</span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/30">Live Demonstration</span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span className="text-xs font-mono text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">
+                    Interactive Knowledge Radar & Hologram HUD
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/30">
+                    Live Telemetry
+                  </span>
                 </div>
-                <h3 className={`text-base sm:text-lg font-heading font-bold ${isDark ? "text-white" : "text-slate-950"}`}>
-                  Cross-Source Information Gap & Contradiction Detection
+                <h3 className={`text-base sm:text-xl font-heading font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+                  Cross-Source Information Gap & Contradiction Matrix
                 </h3>
               </div>
 
@@ -421,7 +528,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                     <button
                       key={key}
                       onClick={() => setActiveScenarioKey(key)}
-                      className={`px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                         isActive
                           ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25"
                           : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
@@ -435,110 +542,220 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               </div>
             </div>
 
-            {/* Scenario Header Info */}
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800/80 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 uppercase font-semibold">Research Query:</span>
-                <p className={`text-xs sm:text-sm font-semibold mt-0.5 ${isDark ? "text-slate-200" : "text-slate-800"}`}>
-                  "{scenario.question}"
-                </p>
-              </div>
-              <div className="flex items-center gap-3 shrink-0 text-xs font-mono">
-                <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-xs">
-                  {scenario.sourcesCount} Sources
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30 font-bold">
-                  {scenario.gapsCount} Gaps
-                </span>
-                <span className="px-2.5 py-1 rounded-lg bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-500/30 font-bold">
-                  {scenario.conflictsCount} Conflicts
-                </span>
-              </div>
-            </div>
-
-            {/* Three Side-by-Side Finding Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Holographic Radar Hub Visualizer */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center mb-6">
               
-              {/* Card 1: Missing Gap */}
-              <div className="p-5 rounded-2xl bg-amber-500/10 dark:bg-amber-950/20 border border-amber-500/40 flex flex-col justify-between space-y-3 relative group hover:border-amber-500 transition-all">
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-amber-600 dark:text-amber-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
+              {/* Radar Graphic (Left Column 5 cols) */}
+              <div className="lg:col-span-5 relative flex items-center justify-center p-6 rounded-2xl bg-slate-100/70 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800/80 min-h-[300px] overflow-hidden">
+                {/* Concentric radar circles */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="w-56 h-56 rounded-full border border-dashed border-amber-500/20"></div>
+                  <div className="absolute w-40 h-40 rounded-full border border-dashed border-cyan-500/25"></div>
+                  <div className="absolute w-24 h-24 rounded-full border border-amber-500/30"></div>
+                  {/* Rotating Radar Sweep Beam */}
+                  <div className="absolute w-56 h-56 rounded-full animate-radar-sweep pointer-events-none">
+                    <div className="w-1/2 h-1/2 bg-gradient-to-br from-amber-400/25 to-transparent rounded-tl-full origin-bottom-right"></div>
+                  </div>
+                </div>
+
+                {/* Central Intelligence Core Node */}
+                <div className="relative z-10 w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 flex flex-col items-center justify-center text-slate-950 shadow-xl shadow-amber-500/30 animate-pulse text-center p-1">
+                  <Compass className="w-6 h-6 mb-0.5" />
+                  <span className="text-[10px] font-heading font-black leading-tight">DARK SPOT</span>
+                  <span className="text-[8px] font-mono tracking-tighter uppercase font-bold">CORE</span>
+                </div>
+
+                {/* Orbiting Source Node 1 (Top) */}
+                <button
+                  type="button"
+                  onClick={() => setActiveRadarNode(0)}
+                  className={`absolute top-4 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    activeRadarNode === 0
+                      ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-lg shadow-emerald-500/30 scale-105"
+                      : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>S1: Official Gazette</span>
+                </button>
+
+                {/* Orbiting Source Node 2 (Right) */}
+                <button
+                  type="button"
+                  onClick={() => setActiveRadarNode(1)}
+                  className={`absolute right-3 top-1/2 -translate-y-1/2 z-20 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    activeRadarNode === 1
+                      ? "bg-indigo-500 text-white border-indigo-400 shadow-lg shadow-indigo-500/30 scale-105"
+                      : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
+                  <span>S2: 2023 Archive</span>
+                </button>
+
+                {/* Orbiting Source Node 3 (Bottom) */}
+                <button
+                  type="button"
+                  onClick={() => setActiveRadarNode(2)}
+                  className={`absolute bottom-4 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    activeRadarNode === 2
+                      ? "bg-rose-500 text-white border-rose-400 shadow-lg shadow-rose-500/30 scale-105"
+                      : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-rose-400"></span>
+                  <span>S3: Discrepancy</span>
+                </button>
+
+                {/* Orbiting Source Node 4 (Left) */}
+                <button
+                  type="button"
+                  onClick={() => setActiveRadarNode(3)}
+                  className={`absolute left-3 top-1/2 -translate-y-1/2 z-20 px-2.5 py-1.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    activeRadarNode === 3
+                      ? "bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/30 scale-105"
+                      : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700"
+                  }`}
+                >
+                  <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+                  <span>S4: Omission</span>
+                </button>
+              </div>
+
+              {/* Live Telemetry Cards (Right Column 7 cols) */}
+              <div className="lg:col-span-7 space-y-3">
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                  <div className="text-xs">
+                    <span className="text-slate-400 font-mono text-[10px] uppercase font-bold block">Active Cross-Source Inspection:</span>
+                    <span className={`font-heading font-bold text-sm ${isDark ? "text-white" : "text-slate-900"}`}>
+                      {scenario.question}
+                    </span>
+                  </div>
+                  <span className="px-2 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/30 font-mono text-xs font-bold shrink-0">
+                    {scenario.badge}
+                  </span>
+                </div>
+
+                {/* Source Nodes Quick Status Strip */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {scenario.sourcesList.map((src, i) => (
+                    <button
+                      key={src.id}
+                      onClick={() => setActiveRadarNode(i)}
+                      className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                        activeRadarNode === i
+                          ? "bg-amber-500/20 border-amber-500 font-bold"
+                          : "bg-white dark:bg-slate-900/50 border-slate-200 dark:border-slate-800"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between text-[10px] font-mono mb-1">
+                        <span className="font-bold text-amber-500">{src.id}</span>
+                        <span className="text-slate-400">{src.date.split(" ")[0]}</span>
+                      </div>
+                      <p className="text-[11px] font-medium line-clamp-1 leading-tight text-slate-800 dark:text-slate-200">
+                        {src.name}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Active Finding Inspection Callout */}
+                <div className="p-4 rounded-2xl bg-amber-500/10 dark:bg-amber-950/20 border border-amber-500/40 relative">
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className="font-extrabold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                       <AlertTriangle className="w-3.5 h-3.5" />
-                      <span>Information Gap</span>
+                      <span>Pinpointed Finding in Source {scenario.sourcesList[activeRadarNode]?.id || "S1"}</span>
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300">
-                      High Priority
-                    </span>
-                  </div>
-                  <h4 className={`text-sm font-heading font-bold mb-1.5 ${isDark ? "text-white" : "text-slate-900"}`}>
-                    {scenario.sampleGap.title}
-                  </h4>
-                  <p className={`text-xs leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>
-                    {scenario.sampleGap.desc}
-                  </p>
-                </div>
-                <div className="text-[11px] font-mono text-amber-700 dark:text-amber-300 bg-amber-500/10 dark:bg-amber-950/50 px-2.5 py-1.5 rounded-xl border border-amber-500/30 font-semibold">
-                  {scenario.sampleGap.status}
-                </div>
-              </div>
-
-              {/* Card 2: Contradiction */}
-              <div className="p-5 rounded-2xl bg-rose-500/10 dark:bg-rose-950/20 border border-rose-500/40 flex flex-col justify-between space-y-3 relative group hover:border-rose-500 transition-all">
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-rose-600 dark:text-rose-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
-                      <ShieldAlert className="w-3.5 h-3.5" />
-                      <span>Contradiction</span>
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-700 dark:text-rose-300">
-                      Discrepancy
-                    </span>
-                  </div>
-                  <h4 className={`text-sm font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
-                    {scenario.sampleConflict.title}
-                  </h4>
-                  <div className="space-y-1.5 text-xs">
-                    <p className="p-2 rounded-lg bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 font-medium text-slate-800 dark:text-slate-200">
-                      <span className="text-amber-500 font-bold">A:</span> {scenario.sampleConflict.claimA}
-                    </p>
-                    <p className="p-2 rounded-lg bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 font-medium text-slate-800 dark:text-slate-200">
-                      <span className="text-rose-500 font-bold">B:</span> {scenario.sampleConflict.claimB}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-[11px] font-mono text-rose-700 dark:text-rose-300 bg-rose-500/10 dark:bg-rose-950/50 px-2.5 py-1.5 rounded-xl border border-rose-500/30">
-                  {scenario.sampleConflict.action}
-                </div>
-              </div>
-
-              {/* Card 3: Outdated */}
-              <div className="p-5 rounded-2xl bg-indigo-500/10 dark:bg-indigo-950/20 border border-indigo-500/40 flex flex-col justify-between space-y-3 relative group hover:border-indigo-500 transition-all">
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-indigo-600 dark:text-indigo-400 font-extrabold uppercase tracking-wider flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>Cycle Warning</span>
-                    </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">
-                      Temporal Risk
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-700 dark:text-amber-300 font-bold">
+                      {scenario.sourcesList[activeRadarNode]?.status || "Audited"}
                     </span>
                   </div>
                   <h4 className={`text-sm font-heading font-bold mb-1 ${isDark ? "text-white" : "text-slate-900"}`}>
-                    {scenario.sampleOutdated.source}
+                    {activeRadarNode === 0
+                      ? "Official Application Window Verified"
+                      : activeRadarNode === 1
+                      ? scenario.sampleConflict.title
+                      : activeRadarNode === 2
+                      ? scenario.sampleOutdated.source
+                      : scenario.sampleGap.title}
                   </h4>
-                  <p className="text-xs text-indigo-600 dark:text-indigo-300 font-mono font-semibold mb-1.5">
-                    Cycle: {scenario.sampleOutdated.cycle}
-                  </p>
                   <p className={`text-xs leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>
-                    {scenario.sampleOutdated.reason}
+                    {activeRadarNode === 0
+                      ? "Gazette circular establishes the legally binding deadline as November 20, 2025. All other conflicting bulletins are deemed superseded."
+                      : activeRadarNode === 1
+                      ? `Discrepancy: ${scenario.sampleConflict.claimA} vs ${scenario.sampleConflict.claimB}`
+                      : activeRadarNode === 2
+                      ? scenario.sampleOutdated.reason
+                      : scenario.sampleGap.desc}
                   </p>
-                </div>
-                <div className="text-[11px] font-mono text-indigo-700 dark:text-indigo-300 bg-indigo-500/10 dark:bg-indigo-950/50 px-2.5 py-1.5 rounded-xl border border-indigo-500/30">
-                  Status: Potentially Outdated
                 </div>
               </div>
 
+            </div>
+
+            {/* Live Metrics Meter Bar */}
+            <div className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 rounded-2xl border bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] font-mono uppercase text-slate-400 font-bold block">Documented Findings</span>
+                <span className={`text-lg font-heading font-black ${isDark ? "text-white" : "text-slate-900"}`}>{scenario.completeness}%</span>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                  <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${scenario.completeness}%` }}></div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl border bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] font-mono uppercase text-amber-500 font-bold block">Dark Spot Index</span>
+                <span className="text-lg font-heading font-black text-amber-500">{scenario.darkSpotIndex}% Missing</span>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                  <div className="bg-amber-500 h-full rounded-full transition-all duration-500" style={{ width: `${scenario.darkSpotIndex}%` }}></div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl border bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] font-mono uppercase text-rose-500 font-bold block">Contradictions</span>
+                <span className="text-lg font-heading font-black text-rose-500">{scenario.conflictsCount} Discrepancies</span>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                  <div className="bg-rose-500 h-full rounded-full transition-all duration-500" style={{ width: `${scenario.conflictsCount * 50}%` }}></div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl border bg-slate-50 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] font-mono uppercase text-indigo-500 font-bold block">Temporal Status</span>
+                <span className="text-lg font-heading font-black text-indigo-500">1 Superseded</span>
+                <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
+                  <div className="bg-indigo-500 h-full rounded-full transition-all duration-500" style={{ width: `75%` }}></div>
+                </div>
+              </div>
+            </div>
+
+            {/* LIVE VERIFICATION TERMINAL TICKER */}
+            <div className="rounded-2xl bg-slate-950 border border-slate-800 p-3 sm:p-4 mb-6 font-mono text-xs shadow-inner">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800/80 text-[11px] text-slate-400">
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="font-bold text-slate-300">Live AI Execution Log Stream</span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px]">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                  <span className="text-emerald-400 font-bold">ONLINE & EXECUTING</span>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                {TERMINAL_LOGS.map((log, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex items-start gap-2.5 transition-opacity duration-300 ${
+                      activeLogIndex === idx ? "opacity-100 font-bold" : "opacity-45"
+                    }`}
+                  >
+                    <span className="text-slate-500 shrink-0 text-[10px]">[{log.time}]</span>
+                    <span className={`px-1.5 py-0.2 rounded text-[9px] uppercase font-bold shrink-0 ${log.color} bg-slate-900 border border-slate-800`}>
+                      {log.tag}
+                    </span>
+                    <span className="text-slate-300 text-[11px] truncate">{log.text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Simulator Action Callout */}
@@ -562,26 +779,172 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
       </section>
 
       {/* STATS & CREDIBILITY RIBBON */}
-      <section className="py-10 border-y border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#090d16]/90">
+      <section className="py-12 border-y border-slate-200 dark:border-slate-800/80 bg-white/50 dark:bg-[#090d16]/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="p-4">
+            <div className="p-4 rounded-2xl glass-panel border border-slate-200 dark:border-slate-800 hover:scale-105 transition-transform">
               <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-amber-500">100%</p>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Verbatim Grounding Snippets</p>
             </div>
-            <div className="p-4">
+            <div className="p-4 rounded-2xl glass-panel border border-slate-200 dark:border-slate-800 hover:scale-105 transition-transform">
               <p className={`text-3xl sm:text-4xl lg:text-5xl font-heading font-black ${isDark ? "text-white" : "text-slate-900"}`}>5 Stages</p>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Deterministic & AI Pipeline</p>
             </div>
-            <div className="p-4">
+            <div className="p-4 rounded-2xl glass-panel border border-slate-200 dark:border-slate-800 hover:scale-105 transition-transform">
               <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-cyan-600 dark:text-cyan-400">4-Tier</p>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Temporal Freshness Matrix</p>
             </div>
-            <div className="p-4">
+            <div className="p-4 rounded-2xl glass-panel border border-slate-200 dark:border-slate-800 hover:scale-105 transition-transform">
               <p className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-emerald-600 dark:text-emerald-400">0%</p>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium mt-1">Hallucinated Citations</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ============================================================== */}
+      {/* LUXURY BENTO GRID: 4 PILLARS OF RESEARCH INTEGRITY              */}
+      {/* ============================================================== */}
+      <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-amber-500 font-heading">
+            Architectural Differentiation
+          </span>
+          <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold mt-2 ${isDark ? "text-white" : "text-slate-900"}`}>
+            Engineered for Ground Truth, Not Flattery
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">
+            Most AI tools try to be helpful by guessing answers to missing data. Digital Dark Spot rejects probabilistic hallucination, enforcing strict negative proof.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          {/* Bento Item 1: Wide 2-Col Negative-Proof Gap Engine */}
+          <div className="md:col-span-2 p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-amber-500/30 flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/60 transition-all shadow-xl">
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/30">
+                  Core Innovation
+                </span>
+              </div>
+              <h3 className={`text-xl sm:text-2xl font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
+                Negative-Proof Gap Detection
+              </h3>
+              <p className={`text-xs sm:text-sm leading-relaxed mb-6 max-w-xl ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+                Identifies crucial research questions that are <b>completely absent</b> across all reviewed sources. Never fabricates criteria to sound complete.
+              </p>
+
+              {/* Interactive Mock Gap Visualizer */}
+              <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-2 text-xs font-mono">
+                <div className="flex items-center justify-between text-slate-400 text-[11px] pb-1 border-b border-slate-200 dark:border-slate-800">
+                  <span>AUDITED CONDITION</span>
+                  <span>STATUS IN SOURCES REVIEWED</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-700 dark:text-slate-200 font-sans font-medium">Initial Eligibility Income Cap</span>
+                  <span className="text-emerald-500 font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Found (INR 8L)
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-700 dark:text-slate-200 font-sans font-medium">Year 2 Renewal CGPA Requirement</span>
+                  <span className="text-amber-500 font-bold flex items-center gap-1">
+                    <AlertTriangle className="w-3.5 h-3.5" /> Not Found in Sources
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-700 dark:text-slate-200 font-sans font-medium">Backlog Subject Allowance</span>
+                  <span className="text-amber-500 font-bold flex items-center gap-1">
+                    <AlertTriangle className="w-3.5 h-3.5" /> Not Found in Sources
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bento Item 2: Contradiction Matrix */}
+          <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-rose-500/30 flex flex-col justify-between group hover:border-rose-500/60 transition-all shadow-xl">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-500 flex items-center justify-center">
+                  <ShieldAlert className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-rose-500/10 text-rose-500 border border-rose-500/30">
+                  Stage 2
+                </span>
+              </div>
+              <h3 className={`text-xl font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
+                Discrepancy Matrix
+              </h3>
+              <p className={`text-xs sm:text-sm leading-relaxed mb-4 ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+                Flags incompatible claims between separate URLs with traceable verbatim excerpts and verification guidance.
+              </p>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs">
+              <span className="text-[10px] font-mono uppercase text-rose-500 font-bold block mb-1">Live Example:</span>
+              <p className="text-slate-700 dark:text-slate-200 font-medium">"Nov 20 Gazette notice directly contradicts Nov 10 archive bulletin."</p>
+            </div>
+          </div>
+
+          {/* Bento Item 3: Temporal Freshness */}
+          <div className="p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-indigo-500/30 flex flex-col justify-between group hover:border-indigo-500/60 transition-all shadow-xl">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-500 flex items-center justify-center">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-500 border border-indigo-500/30">
+                  Stage 4
+                </span>
+              </div>
+              <h3 className={`text-xl font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
+                Temporal Freshness
+              </h3>
+              <p className={`text-xs sm:text-sm leading-relaxed mb-4 ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+                Audits timestamps and cycle labels to warn you when a circular references expired application seasons.
+              </p>
+            </div>
+            <div className="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-xs">
+              <span className="text-[10px] font-mono uppercase text-indigo-500 font-bold block mb-1">Cycle Tracking:</span>
+              <p className="text-slate-700 dark:text-slate-200 font-medium">2023 Academic Cycle detected • Superseded by 2025 Regulations.</p>
+            </div>
+          </div>
+
+          {/* Bento Item 4: Wide 2-Col Actionable Checklist & Vector PDF */}
+          <div className="md:col-span-2 p-6 sm:p-8 rounded-3xl glass-panel-elevated border border-emerald-500/30 flex flex-col justify-between group hover:border-emerald-500/60 transition-all shadow-xl">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-500 flex items-center justify-center">
+                  <FileCheck2 className="w-6 h-6" />
+                </div>
+                <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">
+                  Stage 5 Synthesis
+                </span>
+              </div>
+              <h3 className={`text-xl sm:text-2xl font-heading font-bold mb-2 ${isDark ? "text-white" : "text-slate-900"}`}>
+                Actionable Escalation Checklist & Vector PDF
+              </h3>
+              <p className={`text-xs sm:text-sm leading-relaxed mb-4 ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+                Transforms findings into prioritized action steps with exact office phone numbers, official enquiry portals, and an executive ReportLab vector PDF ready for board review.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <span className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+                ✓ ReportLab Vector Engine
+              </span>
+              <span className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+                ✓ Official Authority Contacts
+              </span>
+              <span className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-mono text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+                ✓ Negative-Proof Disclaimers
+              </span>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -591,7 +954,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
       <section className="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs uppercase font-extrabold tracking-widest text-amber-500 font-heading">
-            Architectural Differentiation
+            Reality Check
           </span>
           <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-extrabold mt-2 ${isDark ? "text-white" : "text-slate-900"}`}>
             Why Generic AI Summarizers Fail Serious Research

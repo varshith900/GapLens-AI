@@ -142,14 +142,14 @@
               border-color 0.25s ease;
 }
 .card-hover-lift:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
 .dark .card-hover-lift:hover {
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(245, 158, 11, 0.2);
-  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.65), 0 0 25px -5px rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.45);
 }
 .card-hover-lift:hover {
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1), 0 0 20px -5px rgba(217, 119, 6, 0.15);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.12), 0 0 25px -5px rgba(217, 119, 6, 0.2);
   border-color: rgba(217, 119, 6, 0.5);
 }
 
@@ -183,4 +183,96 @@
   -webkit-background-clip: text;
   background-clip: text;
   animation: shimmer 4s linear infinite;
+}
+
+/* Floating Micro Animations */
+@keyframes float-slow-left {
+  0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+  50% { transform: translateY(-10px) rotate(0.5deg); }
+}
+@keyframes float-slow-right {
+  0%, 100% { transform: translateY(0px) rotate(1.5deg); }
+  50% { transform: translateY(-12px) rotate(-0.5deg); }
+}
+.animate-float-left {
+  animation: float-slow-left 6s ease-in-out infinite;
+}
+.animate-float-right {
+  animation: float-slow-right 7s ease-in-out infinite;
+}
+
+/* Laser Scanline Effect across Simulator */
+@keyframes scanline {
+  0% { transform: translateY(-100%); opacity: 0; }
+  15% { opacity: 0.8; }
+  85% { opacity: 0.8; }
+  100% { transform: translateY(1000%); opacity: 0; }
+}
+.animate-scanline {
+  animation: scanline 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Border Glow Pulse */
+@keyframes border-glow-pulse {
+  0%, 100% {
+    border-color: rgba(245, 158, 11, 0.35);
+    box-shadow: 0 0 20px -5px rgba(245, 158, 11, 0.15);
+  }
+  50% {
+    border-color: rgba(99, 102, 241, 0.45);
+    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.25);
+  }
+}
+.animate-border-glow {
+  animation: border-glow-pulse 6s ease-in-out infinite;
+}
+
+/* Radar Sweep Keyframe */
+@keyframes radar-sweep {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-radar-sweep {
+  animation: radar-sweep 8s linear infinite;
+}
+
+/* Aurora Drift Background */
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-25px, 25px) scale(0.95); }
+}
+.animate-aurora-drift {
+  animation: aurora-drift 14s ease-in-out infinite;
+}
+
+/* Glow Pulses for Interactive Nodes */
+@keyframes node-pulse-amber {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+}
+.animate-node-pulse-amber {
+  animation: node-pulse-amber 2.5s infinite;
+}
+
+@keyframes node-pulse-rose {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+}
+.animate-node-pulse-rose {
+  animation: node-pulse-rose 2.5s infinite;
+}
+
+@keyframes node-pulse-emerald {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+}
+.animate-node-pulse-emerald {
+  animation: node-pulse-emerald 2.5s infinite;
+}
+
+/* Gradient Flow Background */
+.gradient-mask-radial {
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
 }
