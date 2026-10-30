@@ -9,7 +9,16 @@ import {
   AlertCircle,
   Loader2,
   ShieldCheck,
-  Layers
+  Layers,
+  GraduationCap,
+  Briefcase,
+  Landmark,
+  Building2,
+  Cpu,
+  HeartPulse,
+  Compass,
+  CheckCircle2,
+  Info
 } from "lucide-react";
 import { createResearch, triggerAnalysis } from "../services/api";
 import type { UserProfile } from "../types";
@@ -20,13 +29,13 @@ interface ResearchPageProps {
 }
 
 const CATEGORIES = [
-  "Education",
-  "Career",
-  "Government Services",
-  "Business",
-  "Technology",
-  "Healthcare",
-  "General Research"
+  { name: "Education", icon: GraduationCap },
+  { name: "Career", icon: Briefcase },
+  { name: "Government Services", icon: Landmark },
+  { name: "Business", icon: Building2 },
+  { name: "Technology", icon: Cpu },
+  { name: "Healthcare", icon: HeartPulse },
+  { name: "General Research", icon: Compass },
 ];
 
 const DEMO_PRESET_URLS = [
@@ -58,12 +67,12 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
     if (!trimmed) return;
 
     if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
-      setUrlError("Please enter a valid URL starting with http:// or https://");
+      setUrlError("URL must start with http:// or https://");
       return;
     }
 
     if (sources.includes(trimmed)) {
-      setUrlError("This URL has already been added to the source list.");
+      setUrlError("This URL is already in your source list.");
       return;
     }
 
@@ -79,7 +88,7 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
     setTopic("Scholarship Application Research");
     setQuestion("What should a student verify before applying for a government scholarship?");
     setCategory("Education");
-    setContext("Undergraduate applicant verifying eligibility, submission channels, and renewal terms across state and national portals.");
+    setContext("Undergraduate applicant verifying eligibility, mandatory documentation, and renewal terms across state and national portals.");
     setSources(DEMO_PRESET_URLS);
     setUrlError("");
     setSubmitError("");
@@ -145,108 +154,134 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       
       {/* Workspace Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 sm:pb-8 border-b border-slate-800 gap-4">
         <div>
-          <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">
-            <FileSearch className="w-4 h-4" />
+          <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+            <FileSearch className="w-3.5 h-3.5" />
             <span>Research Workspace</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
-            Initiate New Cross-Source Investigation
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-heading font-extrabold text-white">
+            Initiate Cross-Source Investigation
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
-            Input your objective and information sources to detect omissions, contradictions, and outdated claims.
+          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl leading-relaxed">
+            Provide your research objective and multiple reference URLs. The multi-stage AI engine will detect missing conditions, conflicting requirements, and expired deadlines.
           </p>
         </div>
 
+        {/* Demo Preset Trigger */}
         <button
           onClick={handleLoadDemoPreset}
-          className="self-start md:self-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/10 to-amber-600/10 hover:from-amber-500/20 hover:to-amber-600/20 border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center gap-2 transition-all shadow-sm"
+          className="self-start md:self-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-500/20 to-amber-600/15 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/35 text-amber-300 text-xs font-bold flex items-center gap-2 transition-all shadow-md hover:scale-[1.02] cursor-pointer shrink-0"
         >
-          <Sparkles className="w-4 h-4 text-amber-400" />
+          <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: "12s" }} />
           <span>Load Hackathon Scholarship Scenario</span>
         </button>
       </div>
 
       {submitError && (
-        <div className="mt-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-3">
+        <div className="mt-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs sm:text-sm flex items-center gap-3 animate-fade-in">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <span>{submitError}</span>
         </div>
       )}
 
+      {/* Loading Modal / Overlay if analyzing */}
       {isSubmitting && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="max-w-md w-full p-8 rounded-2xl glass-panel-elevated border border-slate-700 shadow-2xl text-center">
-            <div className="relative w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-              <Loader2 className="w-16 h-16 text-amber-400 animate-spin" />
-              <Layers className="w-7 h-7 text-amber-300 absolute" />
+        <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-xl flex items-center justify-center p-4">
+          <div className="max-w-md w-full p-8 rounded-3xl glass-panel-glow border border-amber-500/40 shadow-2xl text-center space-y-5 animate-fade-in">
+            <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
+              <Loader2 className="w-20 h-20 text-amber-400 animate-spin" />
+              <Layers className="w-8 h-8 text-amber-300 absolute" />
             </div>
             
-            <h3 className="text-lg font-bold text-white mb-2">Analyzing Information Sources</h3>
-            <p className="text-xs text-slate-400 mb-6 h-8 flex items-center justify-center">
-              {progressStage}
-            </p>
-
-            <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden mb-2">
-              <div
-                className="bg-gradient-to-r from-amber-500 to-amber-300 h-2.5 rounded-full transition-all duration-500"
-                style={{ width: `${progressPercent}%` }}
-              ></div>
+            <div>
+              <h3 className="text-xl font-heading font-bold text-white">Analyzing Information Sources</h3>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1.5 h-10 flex items-center justify-center font-medium">
+                {progressStage}
+              </p>
             </div>
-            <div className="flex justify-between text-[11px] font-mono text-slate-400">
-              <span>Stage: {progressPercent <= 40 ? "Extraction" : progressPercent <= 80 ? "Cross-Analysis" : "Synthesis"}</span>
-              <span className="text-amber-400 font-bold">{progressPercent}%</span>
+
+            {/* Staged progress bar */}
+            <div className="space-y-2">
+              <div className="w-full bg-slate-900 rounded-full h-3 overflow-hidden p-0.5 border border-slate-800">
+                <div
+                  className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-300 h-full rounded-full transition-all duration-500 shadow-md shadow-amber-500/50"
+                  style={{ width: `${progressPercent}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-xs font-mono text-slate-400">
+                <span>Stage: {progressPercent <= 40 ? "Extraction" : progressPercent <= 80 ? "Cross-Analysis" : "Synthesis"}</span>
+                <span className="text-amber-400 font-bold">{progressPercent}%</span>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-8">
+      {/* Form Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 mt-8">
         
-        {/* Left Column: Research Objective & Frame */}
+        {/* Left Column: Research Objective & Categorization */}
         <div className="lg:col-span-7 space-y-6">
-          <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-5">
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <span>1. Research Objective</span>
-              <span className="text-[10px] text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">Required</span>
-            </h2>
+          <div className="p-5 sm:p-7 rounded-3xl glass-panel border border-slate-800/90 space-y-6">
+            
+            <div className="flex items-center justify-between">
+              <h2 className="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
+                <span>1. Research Objective</span>
+              </h2>
+              <span className="text-[10px] text-amber-400 font-bold px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
+                Required
+              </span>
+            </div>
 
+            {/* Topic Input */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Research Topic
               </label>
               <input
                 type="text"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                placeholder="e.g., Government Scholarship Application / Tech Stack Migration"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                placeholder="e.g., Government Scholarship Application / Cloud Database Migration"
+                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
               />
             </div>
 
+            {/* Category Selector with interactive buttons */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-2">
                 Research Domain Category
               </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-amber-500 transition-colors"
-              >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
-              </select>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => {
+                  const Icon = cat.icon;
+                  const isSelected = category === cat.name;
+                  return (
+                    <button
+                      key={cat.name}
+                      type="button"
+                      onClick={() => setCategory(cat.name)}
+                      className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20 scale-[1.02]"
+                          : "bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800"
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" />
+                      <span>{cat.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
+            {/* Research Question / Objective */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
                 Primary Question / Decision Objective
               </label>
               <textarea
@@ -254,96 +289,105 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="What critical conditions, deadlines, document requirements, and renewal terms must be verified?"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors resize-none"
+                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors resize-none leading-relaxed"
               />
-              <p className="text-[11px] text-slate-500 mt-1">
-                The engine evaluates all collected sources against this specific query to identify silent omissions.
+              <p className="text-[11px] text-slate-400 mt-1.5">
+                The AI compares all retrieved documents directly against this question to identify omissions.
               </p>
             </div>
 
+            {/* Additional Context */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Additional Constraints or Background <span className="text-slate-500">(Optional)</span>
+              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+                Additional Constraints or Profile <span className="text-slate-500 font-normal">(Optional)</span>
               </label>
               <input
                 type="text"
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
-                placeholder="e.g., Full-time undergraduate student from low-income bracket"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                placeholder="e.g., Undergraduate student with household income below 8 Lakhs"
+                className="w-full px-4 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
               />
             </div>
+
           </div>
 
-          <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-slate-300 text-xs space-y-1.5">
-            <div className="flex items-center gap-2 font-semibold text-amber-400">
+          {/* Evidence Guarantee Banner */}
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-slate-300 text-xs space-y-1.5">
+            <div className="flex items-center gap-2 font-bold text-amber-400">
               <ShieldCheck className="w-4 h-4" />
-              <span>Evidence Traceability Notice</span>
+              <span>Evidence Grounding Guarantee</span>
             </div>
-            <p className="text-slate-400 leading-relaxed text-[11px]">
-              Every confirmed claim is grounded in source snippets. Missing details will be explicitly framed as: <i>"Not found in the sources reviewed."</i>
+            <p className="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
+              Every source claim is bound to verbatim quotes and live URLs. Missing information is never fabricated—it is transparently noted as: <i>"Not found in the sources reviewed."</i>
             </p>
           </div>
         </div>
 
-        {/* Right Column: Source Collection */}
+        {/* Right Column: Source Collection Engine */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-5">
+          <div className="p-5 sm:p-7 rounded-3xl glass-panel border border-slate-800/90 space-y-5">
+            
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
-                <span>2. Information Sources</span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                  {sources.length} Added
-                </span>
+              <h2 className="text-base sm:text-lg font-heading font-bold text-white flex items-center gap-2">
+                <span>2. Reference Sources</span>
               </h2>
+              <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-slate-800/80 text-amber-300 border border-slate-700 font-bold">
+                {sources.length} Added
+              </span>
             </div>
 
+            {/* Add Source URL Input Form */}
             <form onSubmit={handleAddUrl} className="space-y-2">
               <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Globe className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+                  <Globe className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
                   <input
                     type="url"
                     value={currentUrl}
-                    onChange={(e) => setCurrentUrl(e.target.value)}
+                    onChange={(e) => {
+                      setCurrentUrl(e.target.value);
+                      setUrlError("");
+                    }}
                     placeholder="https://example.gov.in/guidelines"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
+                    className="w-full pl-10 pr-3 py-3 rounded-2xl bg-slate-950/80 border border-slate-800 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors font-mono"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shrink-0"
+                  className="px-4 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm transition-all flex items-center gap-1.5 shrink-0 shadow-md shadow-amber-500/20 cursor-pointer hover:scale-105"
                 >
-                  <Plus className="w-4 h-4 text-amber-400" />
+                  <Plus className="w-4 h-4" />
                   <span>Add</span>
                 </button>
               </div>
 
               {urlError && (
-                <p className="text-[11px] text-rose-400 flex items-center gap-1">
-                  <AlertCircle className="w-3.5 h-3.5" />
+                <p className="text-[11px] text-rose-400 flex items-center gap-1.5 pt-1 animate-fade-in font-medium">
+                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                   <span>{urlError}</span>
                 </p>
               )}
             </form>
 
-            <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
+            {/* Scrollable list of Added Sources */}
+            <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1">
               {sources.length === 0 ? (
-                <div className="py-8 text-center border border-dashed border-slate-800 rounded-xl">
-                  <Globe className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                  <p className="text-xs text-slate-400">No source URLs added yet</p>
-                  <p className="text-[11px] text-slate-500 mt-1">
-                    Paste websites above or click "Load Hackathon Scenario"
+                <div className="py-10 text-center border border-dashed border-slate-800 rounded-2xl space-y-2">
+                  <Globe className="w-8 h-8 text-slate-600 mx-auto" />
+                  <p className="text-xs font-semibold text-slate-400">No source URLs added yet</p>
+                  <p className="text-[11px] text-slate-500">
+                    Paste public web pages or click "Load Hackathon Scholarship Scenario" above
                   </p>
                 </div>
               ) : (
                 sources.map((url, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 flex items-center justify-between gap-3 text-xs group hover:border-slate-700 transition-colors"
+                    className="p-3 sm:p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 flex items-center justify-between gap-3 text-xs group hover:border-slate-700 transition-all card-hover-lift"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="w-5 h-5 rounded-md bg-slate-800 text-[10px] font-mono text-slate-400 flex items-center justify-center shrink-0">
+                      <span className="w-6 h-6 rounded-lg bg-amber-500/10 text-[11px] font-mono text-amber-400 flex items-center justify-center shrink-0 font-bold">
                         {idx + 1}
                       </span>
                       <span className="font-mono text-slate-300 truncate text-[11px]">
@@ -353,30 +397,32 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ user, onNavigate }) 
                     <button
                       type="button"
                       onClick={() => handleRemoveUrl(idx)}
-                      className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                      className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg transition-colors cursor-pointer shrink-0"
                       title="Remove source"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 ))
               )}
             </div>
 
+            {/* Launch Analysis Button */}
             <button
               type="button"
               onClick={handleStartAnalysis}
               disabled={isSubmitting || sources.length === 0}
-              className={`w-full py-3.5 rounded-xl font-bold text-sm transition-all shadow-xl flex items-center justify-center gap-2 ${
+              className={`w-full py-4 rounded-2xl font-bold text-sm transition-all duration-300 shadow-xl flex items-center justify-center gap-2.5 cursor-pointer ${
                 sources.length === 0
                   ? "bg-slate-800 text-slate-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-amber-500/25 hover:scale-[1.02]"
+                  : "bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 shadow-amber-500/25 hover:scale-[1.02]"
               }`}
             >
               <Sparkles className="w-4 h-4 text-slate-950" />
-              <span>Analyze Sources & Detect Gaps</span>
+              <span>Cross-Analyze Sources & Detect Gaps</span>
               <ArrowRight className="w-4 h-4" />
             </button>
+
           </div>
         </div>
 
