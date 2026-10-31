@@ -1,4 +1,4 @@
-# Digital Dark Spot
+# GapLens AI - Digital Dark Spot
 > **AI-Assisted Information Gap & Contradiction Detection Platform**  
 > *Production-Ready Enterprise Research Intelligence Platform*
 
