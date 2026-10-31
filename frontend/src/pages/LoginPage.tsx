@@ -93,8 +93,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onNavigate, onAuthSuccess,
         <div className="lg:col-span-5 p-8 sm:p-10 bg-gradient-to-br from-amber-500/10 via-indigo-600/10 to-transparent flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800/80">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-bold mb-6">
-              <Compass className="w-4 h-4" />
-              <span>Digital Dark Spot</span>
+              <img src="/logo.png" alt="GapsLens AI" className="w-4 h-4 rounded object-cover" />
+              <span>GapsLens AI - Digital Dark Spot</span>
             </div>
             
             <h2 className="text-2xl sm:text-3xl font-heading font-black leading-tight text-slate-900 dark:text-white mb-3">

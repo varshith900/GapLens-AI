@@ -375,8 +375,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
 
   const faqs = [
     {
-      q: "How does Digital Dark Spot distinguish itself from standard generative AI chatbots?",
-      a: "Standard generative LLMs are optimized to construct fluent, complete-sounding narratives. When documentation lacks answers, typical models hallucinate plausible details to satisfy user prompts. Digital Dark Spot rejects this premise: it enforces strict negative-proof constraints, explicitly reporting when critical information is absent across reviewed documentation, highlighting discrepancies between sources, and demanding verifiable citation grounding for every assertion."
+      q: "How does GapsLens AI distinguish itself from standard generative AI chatbots?",
+      a: "Standard generative LLMs are optimized to construct fluent, complete-sounding narratives. When documentation lacks answers, typical models hallucinate plausible details to satisfy user prompts. GapsLens AI - Digital Dark Spot rejects this premise: it enforces strict negative-proof constraints, explicitly reporting when critical information is absent across reviewed documentation, highlighting discrepancies between sources, and demanding verifiable citation grounding for every assertion."
     },
     {
       q: "What is the operational definition of 'Not found in the sources reviewed'?",
@@ -395,9 +395,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
   return (
     <div className="flex flex-col min-h-screen relative overflow-hidden transition-colors duration-300">
       
-      {/* Background Lighting Gradients - Positioned strictly behind content (-z-10) */}
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] lg:w-[1300px] h-[550px] bg-gradient-to-b from-amber-400/25 via-indigo-500/20 to-transparent blur-[140px] pointer-events-none -z-10"></div>
-      <div className="absolute top-[650px] left-1/2 -translate-x-1/2 w-[850px] lg:w-[1100px] h-[500px] bg-gradient-to-b from-indigo-500/15 via-amber-500/10 to-transparent blur-[150px] pointer-events-none -z-10"></div>
+      {/* Background Lighting Gradients - Positioned strictly behind content (-z-10) with subtle ambient float */}
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] lg:w-[1300px] h-[550px] bg-gradient-to-b from-amber-400/25 via-indigo-500/20 to-transparent blur-[140px] pointer-events-none -z-10 animate-ambient-aura"></div>
+      <div className="absolute top-[650px] left-1/2 -translate-x-1/2 w-[850px] lg:w-[1100px] h-[500px] bg-gradient-to-b from-indigo-500/15 via-amber-500/10 to-transparent blur-[150px] pointer-events-none -z-10 animate-ambient-aura" style={{ animationDelay: '-6s' }}></div>
 
       {/* ============================================================== */}
       {/* 1. HERO SECTION                                                */}
@@ -406,41 +406,41 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           
           {/* Institutional Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-500/40 dark:border-amber-500/50 bg-white dark:bg-slate-900 text-xs font-mono tracking-widest uppercase text-amber-900 dark:text-amber-300 mb-8 shadow-sm">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-500/40 dark:border-amber-500/50 bg-white dark:bg-slate-900 text-xs font-mono tracking-widest uppercase text-amber-900 dark:text-amber-300 mb-8 shadow-sm hover:border-amber-500 hover:shadow-md hover:shadow-amber-500/10 transition-all duration-300 group cursor-default">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
             <span className="font-bold">Enterprise Research Intelligence</span>
             <span className="text-slate-400">•</span>
-            <span className="text-slate-700 dark:text-slate-200 font-semibold">Multi-Document Verification</span>
+            <span className="text-slate-700 dark:text-slate-200 font-semibold group-hover:text-amber-600 dark:group-hover:text-amber-300 transition-colors">Multi-Document Verification</span>
           </div>
 
           {/* Primary Headline */}
-          <h1 className={`text-4xl sm:text-6xl lg:text-7xl font-heading font-black tracking-tight max-w-4xl mx-auto leading-[1.08] mb-6 ${isDark ? "text-white" : "text-slate-950"}`}>
+          <h1 className={`text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-black tracking-tight max-w-4xl mx-auto leading-[1.12] mb-6 break-words ${isDark ? "text-white" : "text-slate-950"}`}>
             Uncover the Silent Gaps in Multi-Source Intelligence.
           </h1>
 
           {/* Subtitle */}
           <p className={`text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed mb-10 font-normal ${isDark ? "text-slate-100" : "text-slate-800"}`}>
-            Conventional tools summarize what is present. Digital Dark Spot cross-examines multiple sources to isolate <b className="text-amber-500 dark:text-amber-400 font-bold">silent omissions</b>, resolve <b className="text-rose-600 dark:text-rose-400 font-bold">conflicting directives</b>, and detect <b className="text-indigo-600 dark:text-indigo-400 font-bold">superseded timelines</b> before high-stakes decisions are finalized.
+            Conventional tools summarize what is present. GapsLens AI cross-examines multiple sources to isolate <b className="text-amber-500 dark:text-amber-400 font-bold">silent omissions</b>, resolve <b className="text-rose-600 dark:text-rose-400 font-bold">conflicting directives</b>, and detect <b className="text-indigo-600 dark:text-indigo-400 font-bold">superseded timelines</b> before high-stakes decisions are finalized.
           </p>
 
           {/* Investigation Trigger Dock */}
           <div className="max-w-3xl mx-auto mb-6">
             <form
               onSubmit={handleLaunchSearch}
-              className={`p-2.5 rounded-2xl border transition-all ${
+              className={`p-2.5 rounded-2xl border transition-all duration-300 ${
                 isDark
-                  ? "bg-slate-900 border-slate-700 shadow-2xl focus-within:border-amber-400 focus-within:ring-1 focus-within:ring-amber-400/50"
-                  : "bg-white border-slate-300 shadow-lg focus-within:border-amber-500"
+                  ? "bg-slate-900 border-slate-700 shadow-2xl focus-within:border-amber-400 focus-within:ring-2 focus-within:ring-amber-400/30 hover:border-slate-600"
+                  : "bg-white border-slate-300 shadow-lg focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-400/20 hover:border-slate-400"
               } flex flex-col sm:flex-row items-center gap-2`}
             >
               <div className="flex items-center gap-3 w-full px-3 py-2 text-left">
-                <Search className="w-5 h-5 text-amber-500 shrink-0" />
+                <Search className="w-5 h-5 text-amber-500 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                 <input
                   type="text"
                   placeholder="Enter a research topic, statutory query, or policy URL..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full bg-transparent text-sm sm:text-base placeholder-slate-500 focus:outline-none ${
+                  className={`w-full bg-transparent text-sm sm:text-base placeholder-slate-500 focus:outline-none transition-colors ${
                     isDark ? "text-white" : "text-slate-950"
                   }`}
                 />
@@ -448,10 +448,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               <div className="w-full sm:w-auto shrink-0">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-heading font-black text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-400/25 hover:scale-[1.02]"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-heading font-black text-xs sm:text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-400/25 hover:shadow-lg hover:shadow-amber-400/35 hover:-translate-y-0.5"
                 >
                   <span>Initiate Investigation</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
             </form>
@@ -462,10 +462,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               <button
                 type="button"
                 onClick={() => setActiveScenarioId("scholarship")}
-                className={`transition-colors cursor-pointer ${
+                className={`transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
                   activeScenarioId === "scholarship"
                     ? "text-amber-600 dark:text-amber-400 font-extrabold underline underline-offset-4"
-                    : "text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
+                    : "text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400"
                 }`}
               >
                 Statutory Fellowship
@@ -474,10 +474,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               <button
                 type="button"
                 onClick={() => setActiveScenarioId("cloud")}
-                className={`transition-colors cursor-pointer ${
+                className={`transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
                   activeScenarioId === "cloud"
                     ? "text-amber-600 dark:text-amber-400 font-extrabold underline underline-offset-4"
-                    : "text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
+                    : "text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400"
                 }`}
               >
                 Enterprise Cloud SLA
@@ -486,10 +486,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               <button
                 type="button"
                 onClick={() => setActiveScenarioId("clinical")}
-                className={`transition-colors cursor-pointer ${
+                className={`transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
                   activeScenarioId === "clinical"
                     ? "text-amber-600 dark:text-amber-400 font-extrabold underline underline-offset-4"
-                    : "text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
+                    : "text-slate-700 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400"
                 }`}
               >
                 Clinical Oncology Trial
@@ -503,40 +503,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
       {/* ============================================================== */}
       {/* 2. INSTITUTIONAL METRICS STRIP - 100% SOLID & FULL CONTRAST     */}
       {/* ============================================================== */}
-      <section className="relative z-10 py-9 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] shadow-sm">
+      <section className="relative z-10 py-7 sm:py-9 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111827] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             
-            <div className="p-3">
-              <div className="text-3xl sm:text-4xl font-heading font-black text-amber-500 dark:text-amber-400">100%</div>
-              <div className="text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
+            <div className="p-2 sm:p-3 rounded-xl transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:-translate-y-1 group">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-amber-500 dark:text-amber-400 group-hover:scale-105 transition-transform duration-300">100%</div>
+              <div className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
                 Verbatim Grounding
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-200 mt-1">Every finding tied to exact excerpt quotations</p>
+              <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-200 mt-1">Every finding tied to exact excerpt quotations</p>
             </div>
 
-            <div className="p-3">
-              <div className="text-3xl sm:text-4xl font-heading font-black text-slate-950 dark:text-white">0%</div>
-              <div className="text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
+            <div className="p-2 sm:p-3 rounded-xl transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:-translate-y-1 group">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-slate-950 dark:text-white group-hover:scale-105 transition-transform duration-300">0%</div>
+              <div className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
                 Hallucination Tolerance
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-200 mt-1">Missing criteria recorded under strict negative proof</p>
+              <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-200 mt-1">Missing criteria recorded under strict negative proof</p>
             </div>
 
-            <div className="p-3">
-              <div className="text-3xl sm:text-4xl font-heading font-black text-slate-950 dark:text-white">5 Stages</div>
-              <div className="text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
+            <div className="p-2 sm:p-3 rounded-xl transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:-translate-y-1 group">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-slate-950 dark:text-white group-hover:scale-105 transition-transform duration-300">5 Stages</div>
+              <div className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
                 Deterministic Pipeline
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-200 mt-1">From SSRF quarantine to schema-enforced synthesis</p>
+              <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-200 mt-1">From SSRF quarantine to schema-enforced synthesis</p>
             </div>
 
-            <div className="p-3">
-              <div className="text-3xl sm:text-4xl font-heading font-black text-slate-950 dark:text-white">ReportLab</div>
-              <div className="text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
+            <div className="p-2 sm:p-3 rounded-xl transition-all duration-300 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:-translate-y-1 group">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-black text-slate-950 dark:text-white group-hover:scale-105 transition-transform duration-300">ReportLab</div>
+              <div className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-900 dark:text-white font-extrabold mt-1">
                 Executive Vector PDF
               </div>
-              <p className="text-xs text-slate-700 dark:text-slate-200 mt-1">Board-ready audit dossiers with complete trail</p>
+              <p className="text-[11px] sm:text-xs text-slate-700 dark:text-slate-200 mt-1">Board-ready audit dossiers with complete trail</p>
             </div>
 
           </div>
@@ -546,24 +546,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
       {/* ============================================================== */}
       {/* 3. INTERACTIVE RESEARCH DOSSIER SHOWCASE                        */}
       {/* ============================================================== */}
-      <section className="relative z-10 py-16 sm:py-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-12 sm:py-20 lg:py-24 max-w-6xl mx-auto px-3 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 px-1">
           <div className="text-xs font-mono tracking-widest uppercase text-amber-600 dark:text-amber-400 font-extrabold mb-2.5">
             Verifiable Research Dossier
           </div>
-          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight ${isDark ? "text-white" : "text-slate-950"}`}>
+          <h2 className={`text-2xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight break-words leading-tight ${isDark ? "text-white" : "text-slate-950"}`}>
             Inspect Multi-Source Intelligence in Real Time
           </h2>
-          <p className="text-sm sm:text-base text-slate-800 dark:text-slate-100 mt-3 leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-800 dark:text-slate-100 mt-3 leading-relaxed">
             Switch scenarios below to observe how the platform identifies omissions, confronts contradictory claims, and validates timelines across legal, engineering, and medical corpora.
           </p>
         </div>
 
-        {/* Domain Preset Tabs */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-100 dark:bg-[#151d30] border border-slate-300 dark:border-slate-700 shadow-md">
+        {/* Domain Preset Tabs (Scrollable on small mobile) */}
+        <div className="flex items-center justify-start sm:justify-center overflow-x-auto max-w-full pb-2 mb-6 px-1 no-scrollbar">
+          <div className="inline-flex p-1 rounded-xl sm:rounded-2xl bg-slate-100 dark:bg-[#151d30] border border-slate-300 dark:border-slate-700 shadow-md shrink-0">
             {Object.keys(SCENARIOS).map((key) => {
               const sc = SCENARIOS[key];
               const Icon = sc.icon;
@@ -573,13 +573,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                   key={key}
                   type="button"
                   onClick={() => setActiveScenarioId(key)}
-                  className={`px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-heading font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                  className={`px-3 sm:px-6 py-2 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-heading font-bold transition-all duration-300 flex items-center gap-1.5 sm:gap-2 cursor-pointer shrink-0 whitespace-nowrap active:scale-95 ${
                     isActive
-                      ? "bg-amber-400 text-slate-950 shadow-md shadow-amber-400/30 font-black"
-                      : "text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white"
+                      ? "bg-amber-400 text-slate-950 shadow-md shadow-amber-400/30 font-black scale-[1.02]"
+                      : "text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-transform duration-300 ${isActive ? "rotate-3 scale-110" : ""}`} />
                   <span>{sc.name.split(" ")[0]} Directive</span>
                 </button>
               );
@@ -587,89 +587,89 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
           </div>
         </div>
 
-        {/* The Dossier Workbench Container - 100% Solid Card */}
-        <div className="rounded-3xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#131b2e] shadow-2xl overflow-hidden">
+        {/* The Dossier Workbench Container - 100% Solid Card with subtle hover glow */}
+        <div className="rounded-2xl sm:rounded-3xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#131b2e] shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-amber-500/5 hover:border-slate-400 dark:hover:border-slate-600">
           
           {/* Dossier Header Bar */}
-          <div className="p-5 sm:p-6 border-b border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-[#18233c] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-4 sm:p-6 border-b border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-[#18233c] flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <div className="flex items-center flex-wrap gap-2 text-xs font-mono text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 <span className="font-extrabold">Dossier Reference: DDS-2026-X9</span>
                 <span>•</span>
                 <span className="text-amber-600 dark:text-amber-400 font-black">{scenario.domain}</span>
               </div>
-              <h3 className={`text-base sm:text-lg font-heading font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+              <h3 className={`text-sm sm:text-lg font-heading font-black leading-snug break-words ${isDark ? "text-white" : "text-slate-950"}`}>
                 "{scenario.query}"
               </h3>
             </div>
 
-            {/* Quick Metric Chips */}
-            <div className="flex items-center gap-2.5 shrink-0 text-xs font-mono">
-              <span className="px-3 py-1.5 rounded-lg border border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-extrabold shadow-xs">
+            {/* Quick Metric Chips (Flex-wrap for small viewports with subtle scale) */}
+            <div className="flex items-center flex-wrap gap-2 shrink-0 text-xs font-mono">
+              <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-400 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 font-extrabold shadow-xs whitespace-nowrap transition-all duration-200 hover:scale-105 cursor-default">
                 {scenario.sourcesCount} Sources Audited
               </span>
-              <span className="px-3 py-1.5 rounded-lg border border-amber-500 bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-300 font-black shadow-xs">
+              <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-amber-500 bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-300 font-black shadow-xs whitespace-nowrap transition-all duration-200 hover:scale-105 cursor-default">
                 {scenario.gapsCount} Silent Gaps
               </span>
-              <span className="px-3 py-1.5 rounded-lg border border-rose-500 bg-rose-100 dark:bg-rose-950 text-rose-950 dark:text-rose-300 font-black shadow-xs">
+              <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-rose-500 bg-rose-100 dark:bg-rose-950 text-rose-950 dark:text-rose-300 font-black shadow-xs whitespace-nowrap transition-all duration-200 hover:scale-105 cursor-default">
                 {scenario.conflictsCount} Inconsistencies
               </span>
             </div>
           </div>
 
           {/* Dossier Navigation Tabs */}
-          <div className="flex items-center border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#162138] px-4 overflow-x-auto text-xs font-heading font-bold">
+          <div className="flex items-center border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#162138] px-2 sm:px-4 overflow-x-auto text-xs font-heading font-bold no-scrollbar">
             <button
               onClick={() => setActiveDossierTab("gaps")}
-              className={`py-3.5 px-4 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              className={`py-3 sm:py-3.5 px-3 sm:px-4 border-b-2 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer active:scale-95 ${
                 activeDossierTab === "gaps"
-                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black"
-                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white"
+                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black bg-amber-500/5"
+                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/40"
               }`}
             >
-              <AlertTriangle className="w-4 h-4 text-amber-500" />
+              <AlertTriangle className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-500 shrink-0 transition-transform duration-200 ${activeDossierTab === "gaps" ? "scale-110" : ""}`} />
               <span>Silent Omissions ({scenario.gapsCount})</span>
             </button>
 
             <button
               onClick={() => setActiveDossierTab("conflicts")}
-              className={`py-3.5 px-4 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              className={`py-3 sm:py-3.5 px-3 sm:px-4 border-b-2 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer active:scale-95 ${
                 activeDossierTab === "conflicts"
-                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black"
-                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white"
+                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black bg-amber-500/5"
+                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/40"
               }`}
             >
-              <Scale className="w-4 h-4 text-rose-500" />
+              <Scale className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-rose-500 shrink-0 transition-transform duration-200 ${activeDossierTab === "conflicts" ? "scale-110" : ""}`} />
               <span>Contradiction Matrix ({scenario.conflictsCount})</span>
             </button>
 
             <button
               onClick={() => setActiveDossierTab("temporal")}
-              className={`py-3.5 px-4 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              className={`py-3 sm:py-3.5 px-3 sm:px-4 border-b-2 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer active:scale-95 ${
                 activeDossierTab === "temporal"
-                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black"
-                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white"
+                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black bg-amber-500/5"
+                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/40"
               }`}
             >
-              <Clock className="w-4 h-4 text-indigo-500" />
+              <Clock className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-500 shrink-0 transition-transform duration-200 ${activeDossierTab === "temporal" ? "scale-110" : ""}`} />
               <span>Temporal Validity ({scenario.outdatedCount})</span>
             </button>
 
             <button
               onClick={() => setActiveDossierTab("checklist")}
-              className={`py-3.5 px-4 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+              className={`py-3 sm:py-3.5 px-3 sm:px-4 border-b-2 transition-all duration-200 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer active:scale-95 ${
                 activeDossierTab === "checklist"
-                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black"
-                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white"
+                  ? "border-amber-500 text-amber-600 dark:text-amber-400 font-black bg-amber-500/5"
+                  : "border-transparent text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/40"
               }`}
             >
-              <FileCheck2 className="w-4 h-4 text-emerald-500" />
+              <FileCheck2 className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 shrink-0 transition-transform duration-200 ${activeDossierTab === "checklist" ? "scale-110" : ""}`} />
               <span>Remediation Protocol ({scenario.checklist.length})</span>
             </button>
           </div>
 
           {/* Dossier Tab Content */}
-          <div className="p-6 sm:p-8 bg-white dark:bg-[#131b2e]">
+          <div className="p-4 sm:p-6 md:p-8 bg-white dark:bg-[#131b2e]">
             
             {/* TAB 1: GAPS */}
             {activeDossierTab === "gaps" && (
@@ -677,16 +677,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 {scenario.gaps.map((gap, idx) => (
                   <div
                     key={idx}
-                    className="p-5 rounded-2xl border-2 border-amber-400 dark:border-amber-500/50 bg-amber-50/80 dark:bg-[#1f1a10] space-y-3 shadow-sm"
+                    className="p-4 sm:p-5 rounded-2xl border-2 border-amber-400 dark:border-amber-500/50 bg-amber-50/80 dark:bg-[#1f1a10] space-y-3 shadow-sm transition-all duration-300 hover:shadow-md hover:border-amber-500 hover:-translate-y-0.5"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-2.5">
-                        <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-                        <h4 className={`text-sm sm:text-base font-heading font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+                        <span className="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
+                        <h4 className={`text-sm sm:text-base font-heading font-black break-words ${isDark ? "text-white" : "text-slate-950"}`}>
                           {gap.title}
                         </h4>
                       </div>
-                      <span className="text-xs font-mono font-black px-3 py-1 rounded-md bg-amber-200 dark:bg-amber-900/80 text-amber-950 dark:text-amber-200 border border-amber-400 self-start sm:self-auto">
+                      <span className="text-xs font-mono font-black px-2.5 py-1 rounded-md bg-amber-200 dark:bg-amber-900/80 text-amber-950 dark:text-amber-200 border border-amber-400 self-start sm:self-auto shrink-0 shadow-xs">
                         {gap.status}
                       </span>
                     </div>
@@ -700,7 +700,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                       </p>
                     </div>
 
-                    <div className="pt-2 border-t border-amber-300 dark:border-amber-500/30 flex items-center justify-between text-xs font-mono text-slate-700 dark:text-slate-300 font-bold">
+                    <div className="pt-2 border-t border-amber-300 dark:border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs font-mono text-slate-700 dark:text-slate-300 font-bold">
                       <span>Evaluated across {scenario.sourcesCount} distinct source domains</span>
                       <span className="text-amber-700 dark:text-amber-300 font-black">Strict Negative Proof Enforced</span>
                     </div>
@@ -715,13 +715,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 {scenario.conflicts.map((conflict, idx) => (
                   <div
                     key={idx}
-                    className="p-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#18233a] space-y-4 shadow-sm"
+                    className="p-4 sm:p-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#18233a] space-y-4 shadow-sm transition-all duration-300 hover:shadow-md hover:border-slate-400 dark:hover:border-slate-600 hover:-translate-y-0.5"
                   >
-                    <div className="flex items-center justify-between">
-                      <h4 className={`text-sm sm:text-base font-heading font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <h4 className={`text-sm sm:text-base font-heading font-black break-words ${isDark ? "text-white" : "text-slate-950"}`}>
                         {conflict.title}
                       </h4>
-                      <span className="text-xs font-mono uppercase px-2.5 py-1 rounded bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300 border border-rose-400 font-black">
+                      <span className="text-xs font-mono uppercase px-2.5 py-1 rounded bg-rose-100 dark:bg-rose-950 text-rose-900 dark:text-rose-300 border border-rose-400 font-black self-start sm:self-auto shrink-0 shadow-xs">
                         Irreconcilable Claims
                       </span>
                     </div>
@@ -729,38 +729,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
                       
                       {/* Claim A */}
-                      <div className="p-4 rounded-xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-[#101726]">
+                      <div className="p-3.5 sm:p-4 rounded-xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-[#101726] transition-all duration-200 hover:border-amber-400">
                         <div className="flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-300 mb-1.5 font-bold">
                           <span className="font-black text-amber-600 dark:text-amber-400">Source A</span>
                           <span>{conflict.claimA.date}</span>
                         </div>
-                        <p className="font-extrabold text-slate-950 dark:text-white mb-1.5">
+                        <p className="font-extrabold text-slate-950 dark:text-white mb-1.5 break-words">
                           {conflict.claimA.source}
                         </p>
-                        <blockquote className="italic text-slate-800 dark:text-slate-200 border-l-4 border-amber-500 pl-2.5 text-xs">
+                        <blockquote className="italic text-slate-800 dark:text-slate-200 border-l-4 border-amber-500 pl-2.5 text-xs break-words">
                           "{conflict.claimA.statement}"
                         </blockquote>
                       </div>
 
                       {/* Claim B */}
-                      <div className="p-4 rounded-xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-[#101726]">
+                      <div className="p-3.5 sm:p-4 rounded-xl border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-[#101726] transition-all duration-200 hover:border-rose-400">
                         <div className="flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-300 mb-1.5 font-bold">
                           <span className="font-black text-rose-600 dark:text-rose-400">Source B</span>
                           <span>{conflict.claimB.date}</span>
                         </div>
-                        <p className="font-extrabold text-slate-950 dark:text-white mb-1.5">
+                        <p className="font-extrabold text-slate-950 dark:text-white mb-1.5 break-words">
                           {conflict.claimB.source}
                         </p>
-                        <blockquote className="italic text-slate-800 dark:text-slate-200 border-l-4 border-rose-500 pl-2.5 text-xs">
+                        <blockquote className="italic text-slate-800 dark:text-slate-200 border-l-4 border-rose-500 pl-2.5 text-xs break-words">
                           "{conflict.claimB.statement}"
                         </blockquote>
                       </div>
 
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-amber-100 dark:bg-amber-950/80 border border-amber-400 dark:border-amber-500/50 text-xs sm:text-sm">
+                    <div className="p-3 sm:p-3.5 rounded-xl bg-amber-100 dark:bg-amber-950/80 border border-amber-400 dark:border-amber-500/50 text-xs sm:text-sm">
                       <span className="font-black text-amber-900 dark:text-amber-300 font-mono text-xs uppercase block mb-1">Reconciliation Directive:</span>
-                      <p className="text-slate-950 dark:text-slate-100 font-semibold">{conflict.directive}</p>
+                      <p className="text-slate-950 dark:text-slate-100 font-semibold break-words">{conflict.directive}</p>
                     </div>
 
                   </div>
@@ -774,33 +774,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 {scenario.temporal.map((temp, idx) => (
                   <div
                     key={idx}
-                    className="p-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#18233a] space-y-3.5 shadow-sm"
+                    className="p-4 sm:p-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-[#18233a] space-y-3.5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-400 hover:-translate-y-0.5"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <h4 className={`text-sm sm:text-base font-heading font-black ${isDark ? "text-white" : "text-slate-950"}`}>
+                      <h4 className={`text-sm sm:text-base font-heading font-black break-words ${isDark ? "text-white" : "text-slate-950"}`}>
                         {temp.source}
                       </h4>
-                      <span className="text-xs font-mono px-3 py-1 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-950 dark:text-indigo-200 border border-indigo-400 font-black self-start sm:self-auto">
+                      <span className="text-xs font-mono px-2.5 py-1 rounded-md bg-indigo-100 dark:bg-indigo-950 text-indigo-950 dark:text-indigo-200 border border-indigo-400 font-black self-start sm:self-auto shrink-0 shadow-xs">
                         Superseded Lifecycle
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-                      <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-300 dark:border-slate-700">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs font-mono">
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-300 dark:border-slate-700 transition-colors hover:border-slate-400">
                         <span className="text-slate-600 dark:text-slate-400 text-xs block mb-0.5 font-bold">DOCUMENTED CYCLE</span>
-                        <span className="text-rose-700 dark:text-rose-400 font-black">{temp.publishedCycle}</span>
+                        <span className="text-rose-700 dark:text-rose-400 font-black break-words">{temp.publishedCycle}</span>
                       </div>
-                      <div className="p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-300 dark:border-slate-700">
+                      <div className="p-2.5 sm:p-3 rounded-xl bg-white dark:bg-[#101726] border border-slate-300 dark:border-slate-700 transition-colors hover:border-slate-400">
                         <span className="text-slate-600 dark:text-slate-400 text-xs block mb-0.5 font-bold">ACTIVE GOVERNING CYCLE</span>
-                        <span className="text-emerald-700 dark:text-emerald-400 font-black">{temp.activeCycle}</span>
+                        <span className="text-emerald-700 dark:text-emerald-400 font-black break-words">{temp.activeCycle}</span>
                       </div>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed font-medium">
+                    <p className="text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed font-medium break-words">
                       {temp.reason}
                     </p>
 
-                    <div className="text-xs font-mono text-slate-800 dark:text-slate-200 pt-1">
+                    <div className="text-xs font-mono text-slate-800 dark:text-slate-200 pt-1 break-words">
                       <strong className="text-slate-950 dark:text-white">Prescribed Directive:</strong> {temp.action}
                     </div>
                   </div>
@@ -814,27 +814,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                 {scenario.checklist.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#162138] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm shadow-xs"
+                    className="p-3.5 sm:p-4 rounded-xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#162138] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm shadow-xs transition-all duration-300 hover:shadow-md hover:border-amber-400 hover:-translate-y-0.5"
                   >
                     <div className="space-y-1">
-                      <div className="flex items-center gap-2.5">
-                        <span className={`text-xs font-mono uppercase font-black px-2.5 py-0.5 rounded ${
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className={`text-[10px] sm:text-xs font-mono uppercase font-black px-2 py-0.5 rounded ${
                           item.priority === "High"
                             ? "bg-rose-100 dark:bg-rose-950 text-rose-950 dark:text-rose-300 border border-rose-400"
                             : "bg-amber-100 dark:bg-amber-950 text-amber-950 dark:text-amber-300 border border-amber-400"
                         }`}>
                           {item.priority} Priority
                         </span>
-                        <span className="font-heading font-black text-slate-950 dark:text-white">
+                        <span className="font-heading font-black text-slate-950 dark:text-white break-words">
                           {item.task}
                         </span>
                       </div>
-                      <div className="text-slate-700 dark:text-slate-200 text-xs">
+                      <div className="text-slate-700 dark:text-slate-200 text-xs break-words">
                         Target Office: <span className="font-mono font-bold text-slate-950 dark:text-white">{item.target}</span>
                       </div>
                     </div>
 
-                    <span className="px-3.5 py-1.5 rounded-lg border-2 border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900 text-xs font-mono font-black text-slate-950 dark:text-white shrink-0 self-start sm:self-auto">
+                    <span className="px-3 py-1.5 rounded-lg border-2 border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-900 text-xs font-mono font-black text-slate-950 dark:text-white shrink-0 self-start sm:self-auto shadow-xs">
                       {item.protocol}
                     </span>
                   </div>
@@ -853,7 +853,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               type="button"
               onClick={handleTriggerDemo}
               disabled={loadingDemo}
-              className="px-6 py-3 rounded-xl bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-heading font-black text-xs sm:text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-md"
+              className="px-6 py-3 rounded-xl bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-heading font-black text-xs sm:text-sm hover:opacity-90 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shrink-0 shadow-md hover:shadow-lg hover:-translate-y-0.5"
             >
               <span>{loadingDemo ? "Executing Pipeline..." : "Launch Live Audit Report →"}</span>
             </button>
@@ -881,20 +881,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
             {methodologyStages.map((stage, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-2xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#151e33] flex flex-col justify-between space-y-4 shadow-lg"
+                className="p-4 sm:p-5 rounded-2xl border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-[#151e33] flex flex-col justify-between space-y-4 shadow-lg transition-all duration-300 hover:shadow-xl hover:border-amber-400 dark:hover:border-amber-500/60 hover:-translate-y-1.5 group cursor-default"
               >
                 <div>
                   <div className="flex items-center justify-between text-xs font-mono text-slate-600 dark:text-slate-300 mb-2.5">
-                    <span className="font-black text-amber-600 dark:text-amber-400">STAGE {stage.num}</span>
-                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold border border-slate-300 dark:border-slate-700">
+                    <span className="font-black text-amber-600 dark:text-amber-400 group-hover:underline">STAGE {stage.num}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold border border-slate-300 dark:border-slate-700 transition-colors group-hover:bg-amber-400/20 group-hover:text-amber-700 dark:group-hover:text-amber-300">
                       {stage.category.split(" ")[0]}
                     </span>
                   </div>
-                  <h3 className={`text-sm font-heading font-black mb-2 ${isDark ? "text-white" : "text-slate-950"}`}>
+                  <h3 className={`text-sm font-heading font-black mb-2 break-words transition-colors ${isDark ? "text-white group-hover:text-amber-300" : "text-slate-950 group-hover:text-amber-600"}`}>
                     {stage.title}
                   </h3>
                   <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-medium">
@@ -902,8 +902,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-700 dark:text-slate-300 font-bold">
-                  Verifiable Output Contract
+                <div className="pt-3 border-t border-slate-200 dark:border-slate-700 text-xs font-mono text-slate-700 dark:text-slate-300 font-bold group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                  Verifiable Output Contract →
                 </div>
               </div>
             ))}
@@ -964,12 +964,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               </ul>
             </div>
 
-            {/* Digital Dark Spot Platform */}
+            {/* GapsLens AI Platform */}
             <div className="p-6 sm:p-8 space-y-4 bg-amber-50/70 dark:bg-[#18233c]">
               <div className="flex items-center gap-2.5">
                 <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
                 <h3 className="font-heading font-black text-base sm:text-lg text-slate-950 dark:text-white">
-                  Digital Dark Spot Verification System
+                  GapsLens AI Verification System
                 </h3>
               </div>
               <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -1069,7 +1069,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
             <button
               type="button"
               onClick={() => onNavigate("research")}
-              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-heading font-black text-sm transition-all cursor-pointer shadow-lg shadow-amber-400/25 hover:scale-[1.02]"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-heading font-black text-sm transition-all duration-200 cursor-pointer shadow-lg shadow-amber-400/25 hover:shadow-xl hover:shadow-amber-400/35 hover:-translate-y-0.5"
             >
               Launch Research Workspace
             </button>
@@ -1077,10 +1077,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onNavigate, theme = "d
               type="button"
               onClick={handleTriggerDemo}
               disabled={loadingDemo}
-              className={`w-full sm:w-auto px-8 py-4 rounded-xl border-2 text-xs sm:text-sm font-heading font-black transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              className={`w-full sm:w-auto px-8 py-4 rounded-xl border-2 text-xs sm:text-sm font-heading font-black active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 hover:-translate-y-0.5 ${
                 isDark
-                  ? "bg-slate-900 border-slate-600 text-white hover:bg-slate-800"
-                  : "bg-white border-slate-300 text-slate-950 hover:bg-slate-50 shadow-xs"
+                  ? "bg-slate-900 border-slate-600 text-white hover:bg-slate-800 hover:border-slate-500 shadow-md"
+                  : "bg-white border-slate-300 text-slate-950 hover:bg-slate-50 hover:border-slate-400 shadow-sm"
               }`}
             >
               <span>{loadingDemo ? "Processing..." : "View Sample Scholarship Audit"}</span>

@@ -84,11 +84,15 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand Logo & Tag */}
         <div 
           onClick={() => handleNavClick("landing")}
-          className="flex items-center gap-3 cursor-pointer group select-none"
+          className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group select-none"
         >
-          <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-amber-400 to-indigo-500 shadow-md shadow-amber-500/20 group-hover:scale-105 transition-transform duration-300">
-            <Compass className="w-5 h-5 text-slate-950 transition-transform group-hover:rotate-45 duration-500" />
-            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+          <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 group-hover:scale-105 transition-transform duration-300">
+            <img
+              src="/logo.png"
+              alt="GapsLens AI Logo"
+              className="w-full h-full object-cover"
+            />
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
             </span>
@@ -103,11 +107,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     : "text-slate-900 group-hover:text-amber-600"
                 }`}
               >
-                Digital Dark Spot
+                GapsLens AI
               </span>
             </div>
             <p className="text-[10px] font-mono text-slate-500 tracking-wider uppercase leading-none hidden sm:block">
-              AI Information Gap Detection
+              Digital Dark Spot Detection
             </p>
           </div>
         </div>

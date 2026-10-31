@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Digital Dark Spot",
+        "supportEmail": "jangilivarshith@gmail.com"
+      }
+    }
+  }
+}

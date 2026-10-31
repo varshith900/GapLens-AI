@@ -20,11 +20,11 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void; theme?: "dar
         {/* Brand info */}
         <div className="space-y-3 md:col-span-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-slate-950 shadow-sm">
-              <Compass className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg overflow-hidden shadow-sm border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+              <img src="/logo.png" alt="GapsLens AI Logo" className="w-full h-full object-cover" />
             </div>
             <span className={`font-black text-base font-heading ${isDark ? "text-white" : "text-slate-900"}`}>
-              Digital Dark Spot
+              GapsLens AI
             </span>
           </div>
           <p className="text-xs leading-relaxed">
@@ -32,7 +32,7 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void; theme?: "dar
           </p>
           <div className="flex items-center gap-2 text-xs text-amber-500 font-semibold pt-1">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>AI Information Gap Detection Platform</span>
+            <span>Digital Dark Spot Detection Platform</span>
           </div>
         </div>
 
@@ -127,7 +127,7 @@ export const Footer: React.FC<{ onNavigate: (view: string) => void; theme?: "dar
       <div className={`max-w-7xl mx-auto pt-6 border-t flex flex-col sm:flex-row items-center justify-between text-xs gap-4 ${
         isDark ? "border-slate-800/80 text-slate-500" : "border-slate-200 text-slate-500"
       }`}>
-        <p>© 2026 Digital Dark Spot. All rights reserved. Production Intelligence Platform.</p>
+        <p>© 2026 GapsLens AI - Digital Dark Spot. All rights reserved. Production Intelligence Platform.</p>
         <p className="flex items-center gap-2 font-mono text-[11px]">
           <span>Powered by Google Gemini & FastAPI</span>
           <span>•</span>
