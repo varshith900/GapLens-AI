@@ -1,7 +1,10 @@
 # Environment variables and credentials
 .env
+.env.*
+*.env
 credentials.json
 token.json
+.firebase/
 
 # Temporary intermediate files
 .tmp/*
